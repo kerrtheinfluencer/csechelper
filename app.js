@@ -90,6 +90,25 @@ async function loadData() {
     statPapers.textContent   = allPapers.length;
     statSubjects.textContent = allSubjects.length;
 
+    // Expose papers to AI search widget
+    window.__cxcPapers = allPapers.map(p => ({
+      id:             p.id,
+      title:          p.title,
+      year:           p.year,
+      level:          p.subjects?.level || '',
+      subject_name:   p.subjects?.name  || '',
+      emoji:          p.subjects?.emoji || '📄',
+      paper_number:   p.paper_number,
+      is_mark_scheme: p.is_mark_scheme,
+      file_url:       p.file_url
+    }));
+
+    // Hook: AI results can trigger downloads
+    window.__cxcOpenPaper = (id) => {
+      const paper = allPapers.find(p => p.id === id);
+      if (paper) handleDownload(paper.id, paper.file_url, paper.title);
+    };
+
     renderSubjects();
     renderRecent();
   } catch (err) {
