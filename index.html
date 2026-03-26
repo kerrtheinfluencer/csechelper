@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CXC Past Papers – Free CSEC & CAPE Past Papers PDF</title>
+  <meta name="description" content="Download free CSEC and CAPE past papers and mark schemes. Every subject, every year. The Caribbean's fastest past paper resource." />
+  <meta name="keywords" content="CSEC past papers, CAPE past papers, CXC past papers, CSEC Mathematics, CSEC English, Caribbean exam papers, free past papers Jamaica" />
+  <meta name="theme-color" content="#006400" />
+  <link rel="canonical" href="https://cxcpastpapers.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="CXC Past Papers – Free CSEC & CAPE Past Papers" />
+  <meta property="og:description" content="Every CSEC and CAPE past paper, free and fast. Browse by subject, year, and level." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cxcpastpapers.com/" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CXC Past Papers",
+    "url": "https://cxcpastpapers.com",
+    "description": "Free CSEC and CAPE past papers for Caribbean students",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://cxcpastpapers.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ░░ HEADER ░░ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📚</span>
+        <div class="logo-text">
+          <span class="logo-main">CXC Papers</span>
+          <span class="logo-sub">CSEC · CAPE · FREE</span>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <a href="#subjects" class="nav-link">Subjects</a>
+        <a href="#recent" class="nav-link">Recent</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
+      <button class="install-btn" id="installBtn" style="display:none">⬇ Install App</button>
+    </div>
+  </header>
+
+  <!-- ░░ HERO ░░ -->
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🇯🇲 Built for the Caribbean</div>
+      <h1 class="hero-title">Every CXC Past Paper.<br><span class="hero-accent">Free. Fast. Forever.</span></h1>
+      <p class="hero-sub">CSEC & CAPE past papers and mark schemes — all in one place. No sign-up. No paywall. Just papers.</p>
+
+      <!-- Search Bar -->
+      <div class="search-wrap">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search subject e.g. Mathematics, Biology…" autocomplete="off" />
+          <button class="search-clear" id="searchClear" style="display:none">✕</button>
+        </div>
+      </div>
+
+      <!-- Quick Filters -->
+      <div class="quick-filters">
+        <button class="filter-chip active" data-level="all">All</button>
+        <button class="filter-chip" data-level="CSEC">CSEC</button>
+        <button class="filter-chip" data-level="CAPE">CAPE</button>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-num" id="statPapers">—</span><span class="stat-label">Papers</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" id="statSubjects">—</span><span class="stat-label">Subjects</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
+    </div>
+  </section>
+
+  <!-- ░░ AD SLOT 1 ░░ -->
+  <div class="ad-slot ad-slot--banner" id="adTop">
+    <!-- AdSense banner will go here -->
+    <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto"></ins> -->
+  </div>
+
+  <!-- ░░ SUBJECTS GRID ░░ -->
+  <section class="section" id="subjects">
+    <div class="section-header">
+      <h2 class="section-title">Browse by Subject</h2>
+      <span class="section-count" id="subjectCount"></span>
+    </div>
+    <div class="subjects-grid" id="subjectsGrid">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
+  <!-- ░░ AD SLOT 2 ░░ -->
+  <div class="ad-slot ad-slot--banner" id="adMid">
+    <!-- AdSense mid-page -->
+  </div>
+
+  <!-- ░░ RECENT PAPERS ░░ -->
+  <section class="section" id="recent">
+    <div class="section-header">
+      <h2 class="section-title">Recently Added</h2>
+    </div>
+    <div class="papers-list" id="recentPapers">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
+  <!-- ░░ ABOUT ░░ -->
+  <section class="section about-section" id="about">
+    <div class="about-inner">
+      <h2 class="section-title">Why CXC Papers?</h2>
+      <div class="about-grid">
+        <div class="about-card">
+          <span class="about-icon">⚡</span>
+          <h3>Instant Access</h3>
+          <p>No sign-up. No email. No paywall. Click a subject and get your paper in seconds.</p>
+        </div>
+        <div class="about-card">
+          <span class="about-icon">📱</span>
+          <h3>Works Offline</h3>
+          <p>Install as an app and access papers even without internet. Perfect for study sessions anywhere.</p>
+        </div>
+        <div class="about-card">
+          <span class="about-icon">🎯</span>
+          <h3>Mark Schemes Too</h3>
+          <p>Not just the questions — we have mark schemes so you can check your answers and understand the grading.</p>
+        </div>
+        <div class="about-card">
+          <span class="about-icon">🌍</span>
+          <h3>All Caribbean</h3>
+          <p>Built for Jamaica, Trinidad, Barbados, Guyana, and every Caribbean territory sitting CXC exams.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ SUBJECT SHEET ░░ -->
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+  <div class="bottom-sheet" id="subjectSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title-wrap">
+        <span class="sheet-subject-icon" id="sheetIcon"></span>
+        <div>
+          <h2 class="sheet-title" id="sheetTitle">Subject</h2>
+          <span class="sheet-level-badge" id="sheetLevel"></span>
+        </div>
+      </div>
+      <button class="sheet-close" id="sheetClose">✕</button>
+    </div>
+
+    <!-- Year filter inside sheet -->
+    <div class="sheet-filters">
+      <button class="year-chip active" data-year="all">All Years</button>
+      <button class="year-chip" data-year="2024">2024</button>
+      <button class="year-chip" data-year="2023">2023</button>
+      <button class="year-chip" data-year="2022">2022</button>
+      <button class="year-chip" data-year="2021">2021</button>
+      <button class="year-chip" data-year="2020">2020</button>
+    </div>
+
+    <!-- Ad inside sheet -->
+    <div class="ad-slot ad-slot--sheet" id="adSheet">
+      <!-- AdSense in-sheet -->
+    </div>
+
+    <div class="sheet-papers" id="sheetPapers">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <!-- ░░ TOAST ░░ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">© 2025 CXC Papers · Free forever for Caribbean students</p>
+      <p class="footer-disc">Past papers are used for educational purposes. CXC Past Papers is not affiliated with the Caribbean Examinations Council.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
