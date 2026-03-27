@@ -162,16 +162,21 @@ function buildPaperRow(p) {
   const subjectName = p.subjects?.name || 'Unknown';
   const emoji       = p.subjects?.emoji || '📄';
   const level       = p.subjects?.level || '';
+  const url         = p.file_url || '';
+  const isFolder    = url.includes('drive.google.com/drive/folders');
+  const btnLabel    = isFolder ? '📂 Open Folder' : 'Download';
+  const badgeEmoji  = isFolder ? '📂' : emoji;
   return `
-    <div class="paper-row" onclick="handleDownload('${p.id}', '${p.file_url}', '${escHtml(p.title)}')">
-      <div class="paper-type-badge">${emoji}</div>
+    <div class="paper-row">
+      <div class="paper-type-badge">${badgeEmoji}</div>
       <div class="paper-info">
         <div class="paper-title">${escHtml(p.title)}</div>
-        <div class="paper-meta">${subjectName} · ${level} · ${p.year}${p.is_mark_scheme ? ' · Mark Scheme' : ''}</div>
+        <div class="paper-meta">${subjectName} · ${level} · ${isFolder ? 'Multiple years' : p.year}${p.is_mark_scheme ? ' · Mark Scheme' : ''}</div>
       </div>
-      <button class="paper-download-btn" onclick="event.stopPropagation(); handleDownload('${p.id}', '${p.file_url}', '${escHtml(p.title)}')">
-        Download
-      </button>
+      ${url
+        ? `<a href="${url}" target="_blank" rel="noopener" class="paper-download-btn ${isFolder ? 'folder-btn' : ''}">${btnLabel}</a>`
+        : `<span class="paper-download-btn" style="opacity:.4;cursor:default">Soon</span>`
+      }
     </div>`;
 }
 
