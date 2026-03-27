@@ -145,7 +145,7 @@
   </section>
 
   <!-- ░░ AD SLOT 1 ░░ -->
-  <div class="ad-slot ad-slot--banner" id="adTop">
+  <div id="adTop" style="min-height:0;overflow:hidden;">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-9656521698490533"
@@ -167,7 +167,7 @@
   </section>
 
   <!-- ░░ AD SLOT 2 ░░ -->
-  <div class="ad-slot ad-slot--banner" id="adMid">
+  <div id="adMid" style="min-height:0;overflow:hidden;">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-9656521698490533"
@@ -242,8 +242,8 @@
       <button class="year-chip" data-year="2020">2020</button>
     </div>
 
-    <!-- Ad inside sheet -->
-    <div class="ad-slot ad-slot--sheet" id="adSheet">
+    <!-- Ad inside sheet — only shows when AdSense fills it -->
+    <div id="adSheet" style="min-height:0;overflow:hidden;transition:min-height .3s">
       <ins class="adsbygoogle"
            style="display:block"
            data-ad-client="ca-pub-9656521698490533"
