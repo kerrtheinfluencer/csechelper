@@ -219,7 +219,26 @@ function closeSheet() {
 }
 
 function renderSheetPapers() {
-  let papers = allPapers.filter(p => p.subject_id === currentSubjectId);
+  const allSubjectPapers = allPapers.filter(p => p.subject_id === currentSubjectId);
+
+  // Build year filter chips dynamically based on actual years in data
+  const years = [...new Set(allSubjectPapers.map(p => String(p.year)))].sort((a,b) => b-a);
+  const sheetFilters = document.querySelector('.sheet-filters');
+  if (sheetFilters) {
+    sheetFilters.innerHTML = `<button class="year-chip active" data-year="all">All Years</button>` +
+      years.map(y => `<button class="year-chip" data-year="${y}">${y}</button>`).join('');
+    // Re-attach click handlers
+    sheetFilters.querySelectorAll('.year-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        sheetFilters.querySelectorAll('.year-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeYear = chip.dataset.year;
+        renderSheetPapers();
+      });
+    });
+  }
+
+  let papers = allSubjectPapers;
   if (activeYear !== 'all') papers = papers.filter(p => String(p.year) === activeYear);
 
   if (!papers.length) {
@@ -244,15 +263,22 @@ function renderSheetPapers() {
 
 function buildSheetPaperItem(p) {
   const url = p.file_url || '';
+  const isFolder = url.includes('drive.google.com/drive/folders');
+  const btnLabel = isFolder ? '📂 Open Folder' : 'Download';
+  const metaParts = [
+    isFolder ? 'Multiple years inside' : p.year,
+    p.paper_number ? 'Paper ' + p.paper_number : '',
+    p.is_mark_scheme ? '· Mark Scheme' : ''
+  ].filter(Boolean).join(' · ');
   return `
     <div class="paper-row">
-      <div class="paper-type-badge">${p.is_mark_scheme ? '✅' : '📄'}</div>
+      <div class="paper-type-badge">${isFolder ? '📂' : p.is_mark_scheme ? '✅' : '📄'}</div>
       <div class="paper-info">
         <div class="paper-title">${escHtml(p.title)}</div>
-        <div class="paper-meta">${p.year} · ${p.paper_number ? 'Paper ' + p.paper_number : ''} ${p.is_mark_scheme ? '· Mark Scheme' : ''}</div>
+        <div class="paper-meta">${metaParts}</div>
       </div>
       ${url
-        ? `<a href="${url}" target="_blank" rel="noopener" class="paper-download-btn" onclick="sb.rpc('increment_downloads',{paper_id:'${p.id}'}).catch(()=>{})">Download</a>`
+        ? `<a href="${url}" target="_blank" rel="noopener" class="paper-download-btn ${isFolder ? 'folder-btn' : ''}" onclick="sb.rpc('increment_downloads',{paper_id:'${p.id}'}).catch(()=>{})">${btnLabel}</a>`
         : `<span class="paper-download-btn" style="opacity:.4;cursor:default">Soon</span>`
       }
     </div>`;

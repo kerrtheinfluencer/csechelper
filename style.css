@@ -471,6 +471,8 @@ img { display: block; max-width: 100%; }
   cursor: pointer;
 }
 .paper-download-btn:hover { background: var(--green-mid); color: var(--white); }
+.paper-download-btn.folder-btn { background: var(--gold-muted); color: var(--green-dark); }
+.paper-download-btn.folder-btn:hover { background: var(--gold); color: var(--green-dark); }
 
 /* ─── ABOUT ───────────────────────────────────────────────── */
 .about-section { background: var(--white); border-radius: var(--radius-xl); margin: 0 auto 48px; }
