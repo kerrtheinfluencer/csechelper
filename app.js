@@ -25,6 +25,7 @@ const searchClear   = document.getElementById('searchClear');
 const subjectCount  = document.getElementById('subjectCount');
 const statPapers    = document.getElementById('statPapers');
 const statSubjects  = document.getElementById('statSubjects');
+const statVisitors  = document.getElementById('statVisitors');
 const sheetOverlay  = document.getElementById('sheetOverlay');
 const subjectSheet  = document.getElementById('subjectSheet');
 const sheetTitle    = document.getElementById('sheetTitle');
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupLevelFilters();
   setupYearFilters();
   setupSheet();
+  trackVisitor();
 });
 
 // ─── SERVICE WORKER ───────────────────────────────────────
@@ -401,6 +403,32 @@ function setupSheet() {
     const diff = e.changedTouches[0].clientY - startY;
     if (diff > 80) closeSheet();
   }, { passive: true });
+}
+
+// ─── VISITOR TRACKING ─────────────────────────────────────
+async function trackVisitor() {
+  try {
+    // Generate a privacy-friendly fingerprint (no IP, no personal data)
+    const raw = [
+      navigator.language,
+      screen.width + 'x' + screen.height,
+      Intl.DateTimeFormat().resolvedOptions().timeZone,
+      navigator.hardwareConcurrency || 0,
+    ].join('|');
+
+    // Hash it
+    const msgBuffer = new TextEncoder().encode(raw);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const visitorId = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+
+    const { data, error } = await sb.rpc('track_visitor', { v_id: visitorId });
+    if (!error && data && statVisitors) {
+      statVisitors.textContent = data.toLocaleString();
+    }
+  } catch (e) {
+    // Silently fail — visitor tracking is non-critical
+  }
 }
 
 // ─── SHARE ────────────────────────────────────────────────
