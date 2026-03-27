@@ -155,10 +155,9 @@ async function extractPDFText(file) {
 // Answer a question using extracted PDF text
 function answerFromPDF(question, pdfText) {
   const q = question.toLowerCase();
-  // Find most relevant chunk (simple sliding window)
   const sentences = pdfText.split(/[.!?\n]+/).filter(s => s.trim().length > 20);
   const words = q.split(/\s+/).filter(w => w.length > 3);
-  
+
   // Score each sentence by keyword overlap
   const scored = sentences.map(s => ({
     text: s.trim(),
@@ -166,11 +165,28 @@ function answerFromPDF(question, pdfText) {
   })).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
 
   if (scored.length === 0) {
-    return `I couldn't find a direct answer to that in the uploaded paper. Try rephrasing your question or asking about a specific topic mentioned in the paper.`;
+    // Try broader match — return first 400 chars as context
+    const preview = pdfText.slice(0, 400).trim();
+    if (preview.length < 50) {
+      return `I found very little readable text in this paper. The content I could extract was:
+
+*"${preview || 'none'}"*
+
+This usually means the paper is a **scanned image PDF**. I can only read text-based PDFs. Try a different paper or paste the question text directly in the chat.`;
+    }
+    return `I couldn't find a direct answer to that specific question. Here's what the paper starts with:
+
+*"${preview}…"*
+
+Try asking about a specific keyword or topic from the paper.`;
   }
 
   const topChunks = scored.slice(0, 3).map(s => s.text).join(' ... ');
-  return `Based on the uploaded paper:\n\n"${topChunks.slice(0, 400)}${topChunks.length > 400 ? '…' : ''}"\n\n*This is extracted directly from the paper. Ask me to explain any part in more detail!*`;
+  return `Based on the uploaded paper:
+
+*"${topChunks.slice(0, 500)}${topChunks.length > 500 ? '…' : ''}"*
+
+Ask me to **explain** any part of this in more detail!`;
 }
 
 // ─── STYLES ───────────────────────────────────────────────
@@ -461,23 +477,56 @@ Error: ${err.message || 'Unknown'}`);
   // ── PDF Upload ─────────────────────────────────────────
   async handleFileUpload(e) {
     const file = e.target.files[0];
-    if (!file || !file.name.endsWith('.pdf')) return;
+    if (!file || !file.name.endsWith('.pdf')) {
+      this.addMsg('bot', 'Please upload a **.pdf** file. 📄');
+      return;
+    }
     this.fileInput.value = '';
     this.addMsg('user', `📎 Uploaded: ${file.name}`);
     this.setThinking(true);
     try {
       this.addMsg('bot', `Reading **${file.name}**... ⏳`);
       const text = await extractPDFText(file);
-      window.__pdfText = text;
+
+      // Check if we got meaningful text
+      const cleanText = text.replace(/\s+/g, ' ').trim();
+      const isScanned = cleanText.length < 200;
+
+      window.__pdfText = cleanText;
       window.__pdfName = file.name;
       this.pdfName.textContent = file.name;
       this.pdfBar.style.display = 'flex';
       this.removeTyping();
-      this.addMsg('bot', `✅ Paper loaded! I've read **${file.name}** (${Math.round(text.length/1000)}k characters).\n\nYou can now ask me questions about this paper — for example:\n• *"What topics are covered?"*\n• *"Explain question 3"*\n• *"What is asked about triangles?"*`);
+
+      if (isScanned) {
+        this.addMsg('bot', `⚠️ **${file.name}** appears to be a **scanned image PDF** — I could only extract ${cleanText.length} characters of text.
+
+Scanned PDFs contain images of pages rather than real text, so I can't read them fully.
+
+**What you can do:**
+• Try a different paper (the direct PDF links like Maths 2024/2025 are text-based)
+• Copy and paste specific questions from the paper into the chat
+• Ask me about the topic by name instead`);
+      } else {
+        this.addMsg('bot', `✅ **${file.name}** loaded! (${Math.round(cleanText.length/1000)}k characters read)
+
+Ask me anything about this paper:
+• *"What topics are covered?"*
+• *"Explain question 3"*
+• *"What does it ask about triangles?"*
+• *"Summarise section B"*`);
+      }
     } catch(err) {
       console.error(err);
       this.removeTyping();
-      this.addMsg('bot','Sorry, I couldn\'t read that PDF. Make sure it\'s a text-based PDF (not a scanned image). 😔');
+      this.addMsg('bot', `Couldn't read that PDF 😔
+
+**Possible reasons:**
+• It's a scanned/image PDF
+• The file is password protected
+• File is corrupted
+
+Try a different paper or paste the question text directly in chat.`);
     }
     this.setThinking(false);
     this.renderQuick();
