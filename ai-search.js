@@ -1,12 +1,9 @@
 /* =========================================================
    CXC PAPERS — ai-search.js v4
-   Full local study assistant:
-   - Conversational chat with memory
-   - PDF upload + question answering (PDF.js)
-   - Practice question generator per subject
-   - Semantic paper search (Transformers.js)
-   - Zero API calls
+   Full local study assistant — Zero API calls
    ========================================================= */
+
+import { Brain } from './brain.js';
 
 // ─── PRACTICE QUESTION BANKS ─────────────────────────────
 const PRACTICE = {
@@ -401,29 +398,63 @@ class CXCAssistant {
     this.setProg(0,true);
     this.addMsg('bot','Loading up — just a moment! ⏳');
     try {
-      const { Brain } = await import('./brain.js');
       this.Brain = Brain;
+      this.setStat('Connecting to AI model…','dl');
+
       await Brain.load(({ status, pct }) => {
-        if (status==='downloading') { this.setStat(`Downloading model… ${pct}%`,'dl'); this.setProg(pct*.8); }
+        if (status==='downloading') {
+          this.setStat(`Downloading model… ${pct}%`,'dl');
+          this.setProg(pct * 0.8);
+        } else if (status==='done') {
+          this.setStat('Model ready, indexing papers…','dl');
+        }
       });
+
       const papers = window.__cxcPapers || [];
-      this.setStat(`Indexing ${papers.length} papers…`,'dl');
-      await Brain.index(papers, ({ indexed, total }) => { this.setProg(80+Math.round((indexed/total)*20)); });
-      this.isReady=true;
-      this.btn.classList.remove('loading'); this.btn.classList.add('ready');
-      this.btnLabel.textContent='Study Assistant';
-      this.badge.textContent='✓ READY'; this.badge.classList.add('on');
-      this.setProg(100); setTimeout(()=>this.setProg(0),600);
-      this.setStat(`${papers.length} papers indexed · ask me anything`,'ok');
-      this.chatEl.innerHTML='';
-      this.addMsg('bot',`Ready! 🎉 I can:\n\n• Find **past papers** for any subject\n• Give you **practice questions** with answers\n• **Answer questions** about an uploaded paper PDF 📎\n• Explain any **CSEC topic**\n\nWhat are you studying?`);
+      if (papers.length === 0) {
+        // Papers not loaded yet — wait briefly and retry
+        await new Promise(r => setTimeout(r, 1500));
+      }
+      const finalPapers = window.__cxcPapers || [];
+      this.setStat(`Indexing ${finalPapers.length} papers…`,'dl');
+      await Brain.index(finalPapers, ({ indexed, total }) => {
+        this.setProg(80 + Math.round((indexed / total) * 20));
+      });
+
+      this.isReady = true;
+      this.btn.classList.remove('loading');
+      this.btn.classList.add('ready');
+      this.btnLabel.textContent = 'Study Assistant';
+      this.badge.textContent = '✓ READY';
+      this.badge.classList.add('on');
+      this.setProg(100);
+      setTimeout(() => this.setProg(0), 600);
+      this.setStat(`${finalPapers.length} papers indexed · ask me anything`, 'ok');
+      this.chatEl.innerHTML = '';
+      this.addMsg('bot', `Ready! 🎉 I can:
+
+• Find **past papers** for any subject
+• Give you **practice questions** with answers
+• **Answer questions** about an uploaded paper PDF 📎
+• Explain any **CSEC topic**
+
+What are you studying?`);
       this.renderQuick();
       this.inputEl.focus();
+
     } catch(err) {
-      console.error(err);
-      this.setStat('Failed to load. Try refreshing.','err');
+      console.error('AI load error:', err);
+      this.setStat('Failed to load. Check connection & refresh.', 'err');
       this.btn.classList.remove('loading');
-      this.addMsg('bot','Couldn\'t load the AI model. Please refresh the page. 😔');
+      this.chatEl.innerHTML = '';
+      this.addMsg('bot', `Couldn't load the AI model 😔
+
+Possible fixes:
+• Check your internet connection
+• Hard refresh: **Ctrl+Shift+R**
+• Try a different browser (Chrome works best)
+
+Error: ${err.message || 'Unknown'}`);
     }
   }
 
