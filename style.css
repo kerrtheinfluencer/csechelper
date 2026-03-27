@@ -463,8 +463,14 @@ img { display: block; max-width: 100%; }
   font-weight: 600;
   font-family: 'Syne', sans-serif;
   transition: var(--trans);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
 }
-.paper-download-btn:hover { background: var(--green-mid); }
+.paper-download-btn:hover { background: var(--green-mid); color: var(--white); }
 
 /* ─── ABOUT ───────────────────────────────────────────────── */
 .about-section { background: var(--white); border-radius: var(--radius-xl); margin: 0 auto 48px; }
@@ -515,7 +521,7 @@ img { display: block; max-width: 100%; }
   z-index: 201;
   background: var(--white);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  max-height: 88vh;
+  max-height: 75vh;
   display: flex;
   flex-direction: column;
   transform: translateY(100%);

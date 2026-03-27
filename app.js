@@ -197,6 +197,12 @@ function openSheet(subjectId) {
   sheetOverlay.classList.add('open');
   subjectSheet.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Push AI button up so it doesn't overlap sheet
+  const aiBtn = document.getElementById('cxcAIBtn');
+  const aiPanel = document.getElementById('cxcAIPanel');
+  if (aiBtn) aiBtn.style.bottom = '420px';
+  if (aiPanel) { aiPanel.classList.remove('open'); aiPanel.style.bottom = '480px'; }
 }
 
 function closeSheet() {
@@ -204,6 +210,12 @@ function closeSheet() {
   subjectSheet.classList.remove('open');
   document.body.style.overflow = '';
   currentSubjectId = null;
+
+  // Restore AI button to normal position
+  const aiBtn = document.getElementById('cxcAIBtn');
+  const aiPanel = document.getElementById('cxcAIPanel');
+  if (aiBtn) aiBtn.style.bottom = '28px';
+  if (aiPanel) aiPanel.style.bottom = '90px';
 }
 
 function renderSheetPapers() {
@@ -231,16 +243,18 @@ function renderSheetPapers() {
 }
 
 function buildSheetPaperItem(p) {
+  const url = p.file_url || '';
   return `
-    <div class="paper-row" onclick="handleDownload('${p.id}', '${p.file_url}', '${escHtml(p.title)}')">
+    <div class="paper-row">
       <div class="paper-type-badge">${p.is_mark_scheme ? '✅' : '📄'}</div>
       <div class="paper-info">
         <div class="paper-title">${escHtml(p.title)}</div>
         <div class="paper-meta">${p.year} · ${p.paper_number ? 'Paper ' + p.paper_number : ''} ${p.is_mark_scheme ? '· Mark Scheme' : ''}</div>
       </div>
-      <button class="paper-download-btn" onclick="event.stopPropagation(); handleDownload('${p.id}', '${p.file_url}', '${escHtml(p.title)}')">
-        Download
-      </button>
+      ${url
+        ? `<a href="${url}" target="_blank" rel="noopener" class="paper-download-btn" onclick="sb.rpc('increment_downloads',{paper_id:'${p.id}'}).catch(()=>{})">Download</a>`
+        : `<span class="paper-download-btn" style="opacity:.4;cursor:default">Soon</span>`
+      }
     </div>`;
 }
 
