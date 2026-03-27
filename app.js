@@ -111,6 +111,15 @@ async function loadData() {
 
     renderSubjects();
     renderRecent();
+
+    // Handle ?subject= URL param — auto-open subject on load
+    const urlParams = new URLSearchParams(window.location.search);
+    const subjectParam = urlParams.get('subject');
+    if (subjectParam) {
+      const subjectName = subjectParam.replace(/-/g,' ').toLowerCase();
+      const match = allSubjects.find(s => s.name.toLowerCase() === subjectName);
+      if (match) setTimeout(() => openSheet(match.id), 600);
+    }
   } catch (err) {
     console.error('Load error:', err);
     subjectsGrid.innerHTML = buildEmptyState('⚠️', 'Could not load subjects', 'Check your connection and refresh.');

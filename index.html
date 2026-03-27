@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CXC Past Papers – Free CSEC & CAPE Past Papers PDF</title>
-  <meta name="description" content="Download free CSEC and CAPE past papers and mark schemes. Every subject, every year. The Caribbean's fastest past paper resource." />
-  <meta name="keywords" content="CSEC past papers, CAPE past papers, CXC past papers, CSEC Mathematics, CSEC English, Caribbean exam papers, free past papers Jamaica" />
+  <title>CXC Past Papers – Free CSEC & CAPE Past Papers PDF Download</title>
+  <meta name="description" content="Download free CSEC and CAPE past papers PDFs for Mathematics, English, Biology, Chemistry, Physics and 20+ subjects. Updated 2025. No sign-up required." />
+  <meta name="keywords" content="CSEC past papers, CAPE past papers, CXC past papers, CSEC Mathematics past papers, CSEC English past papers, CSEC Biology, CSEC Chemistry, CSEC Physics, free past papers Jamaica, Caribbean exam papers PDF, CXC exam papers 2024 2025" />
   <meta name="theme-color" content="#006400" />
   <link rel="canonical" href="https://cxcpastpaper.online/" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   <meta name="google-site-verification" content="03PAiXP0PCKXb_Idsyt1hmY8W7wDAPqEI9c48PrJPb0" />
   <meta name="google-site-verification" content="hYERFr3lTBePdupYCU0UZE68wZQvQS4l-dO_8m3Hgag" />
 
@@ -19,6 +20,7 @@
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
   <!-- Fonts -->
@@ -26,10 +28,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9656521698490533" crossorigin="anonymous"></script>
+
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <link rel="stylesheet" href="style.css" />
+  <script>
+    // Handle ?subject= URL param for SEO deep links
+    (function() {
+      const p = new URLSearchParams(window.location.search);
+      const s = p.get('subject');
+      if (s) {
+        const name = s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        document.title = `CSEC ${name} Past Papers – Free Download | CXC Papers`;
+        const desc = document.querySelector('meta[name="description"]');
+        if (desc) desc.content = `Download free CSEC ${name} past papers and mark schemes. All years available. No sign-up required.`;
+      }
+    })();
+  </script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -63,6 +81,7 @@
         <a href="#subjects" class="nav-link">Subjects</a>
         <a href="#recent" class="nav-link">Recent</a>
         <a href="#about" class="nav-link">About</a>
+        <a href="/contribute.html" class="nav-link" style="color:var(--gold)">+ Contribute</a>
       </nav>
       <button class="install-btn" id="installBtn" style="display:none">⬇ Install App</button>
     </div>
@@ -105,8 +124,13 @@
 
   <!-- ░░ AD SLOT 1 ░░ -->
   <div class="ad-slot ad-slot--banner" id="adTop">
-    <!-- AdSense banner will go here -->
-    <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto"></ins> -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9656521698490533"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <!-- ░░ SUBJECTS GRID ░░ -->
@@ -122,7 +146,13 @@
 
   <!-- ░░ AD SLOT 2 ░░ -->
   <div class="ad-slot ad-slot--banner" id="adMid">
-    <!-- AdSense mid-page -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9656521698490533"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <!-- ░░ RECENT PAPERS ░░ -->
@@ -191,7 +221,13 @@
 
     <!-- Ad inside sheet -->
     <div class="ad-slot ad-slot--sheet" id="adSheet">
-      <!-- AdSense in-sheet -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-9656521698490533"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
     <div class="sheet-papers" id="sheetPapers">
