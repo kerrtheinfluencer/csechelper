@@ -268,28 +268,10 @@ img { display: block; max-width: 100%; }
 }
 
 /* ─── AD SLOTS ────────────────────────────────────────────── */
-.ad-slot {
-  background: var(--surface-2);
-  border: 1px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-muted);
-  font-size: .75rem;
-  font-style: italic;
-}
-.ad-slot--banner {
-  width: 100%;
-  min-height: 90px;
-  margin: 0;
-}
-.ad-slot--sheet {
-  min-height: 60px;
-  margin: 0 16px 12px;
-  border-radius: var(--radius-sm);
-}
-/* Hide placeholder text once AdSense loads */
-.ad-slot ins { display: block; }
+.ad-slot { width: 100%; overflow: hidden; }
+.ad-slot--banner { min-height: 90px; margin: 0; }
+.ad-slot--sheet  { min-height: 60px; margin: 0 16px 12px; }
+.ad-slot ins { display: block !important; }
 
 /* ─── SECTIONS ────────────────────────────────────────────── */
 .section {
