@@ -28,6 +28,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3XEYK73KY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P3XEYK73KY');
+  </script>
+
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9656521698490533" crossorigin="anonymous"></script>
 
@@ -273,6 +282,15 @@
       <p class="footer-disc">Past papers are used for educational purposes. CXC Past Papers is not affiliated with the Caribbean Examinations Council.</p>
     </div>
   </footer>
+
+  <!-- Share Sheet -->
+  <div class="share-overlay" id="shareOverlay"></div>
+  <div class="share-sheet" id="shareSheet">
+    <div class="share-sheet-handle"></div>
+    <div class="share-sheet-title" id="shareSheetTitle">Share</div>
+    <div class="share-options" id="shareOptions"></div>
+    <button class="share-cancel" id="shareCancel">Cancel</button>
+  </div>
 
   <script src="app.js"></script>
   <script type="module" src="ai-search.js"></script>

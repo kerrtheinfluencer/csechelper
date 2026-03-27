@@ -204,6 +204,14 @@ function openSheet(subjectId) {
   sheetLevel.textContent  = subject.level;
   sheetLevel.className    = `sheet-level-badge ${subject.level.toLowerCase()}`;
 
+  // GA4 — track subject view
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'view_subject', {
+      subject_name: subject.name,
+      subject_level: subject.level
+    });
+  }
+
   // Update URL for SEO deep linking (without page reload)
   const slug = subject.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const newUrl = `${window.location.pathname}?subject=${slug}&level=${subject.level}`;
@@ -322,10 +330,17 @@ function buildSheetPaperItem(p) {
 async function handleDownload(paperId, fileUrl, title) {
   if (!fileUrl) { showToast('File not available yet.'); return; }
 
-  // Track view count (fire and forget)
+  // Track view count
   sb.rpc('increment_downloads', { paper_id: paperId }).catch(() => {});
 
-  // Open PDF in new tab
+  // GA4 — track paper download
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'download_paper', {
+      paper_title: title,
+      paper_id: paperId
+    });
+  }
+
   window.open(fileUrl, '_blank');
   showToast(`Opening: ${title.slice(0, 30)}…`);
 }
@@ -337,7 +352,13 @@ function setupSearch() {
     searchQuery = searchInput.value.trim();
     searchClear.style.display = searchQuery ? 'block' : 'none';
     clearTimeout(timer);
-    timer = setTimeout(renderSubjects, 200);
+    timer = setTimeout(() => {
+      renderSubjects();
+      // GA4 — track search (debounced, only when query is 3+ chars)
+      if (searchQuery.length >= 3 && typeof gtag !== 'undefined') {
+        gtag('event', 'search', { search_term: searchQuery });
+      }
+    }, 200);
   });
   searchClear.addEventListener('click', () => {
     searchInput.value = '';
@@ -432,27 +453,93 @@ async function trackVisitor() {
 }
 
 // ─── SHARE ────────────────────────────────────────────────
+// ─── SHARE SHEET ──────────────────────────────────────────
+const shareOverlay = document.getElementById('shareOverlay');
+const shareSheet   = document.getElementById('shareSheet');
+const shareOptions = document.getElementById('shareOptions');
+const shareTitle   = document.getElementById('shareSheetTitle');
+
+document.getElementById('shareCancel').addEventListener('click', closeShareSheet);
+shareOverlay.addEventListener('click', closeShareSheet);
+
+function openShareSheet(title, url, gaType) {
+  // GA4
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'share', { method: 'sheet', content_type: gaType, item_id: title });
+  }
+
+  const encodedUrl  = encodeURIComponent(url);
+  const encodedText = encodeURIComponent(title + ' – Free CXC Past Papers');
+
+  shareTitle.textContent = title;
+  shareOptions.innerHTML = `
+    <button class="share-option" onclick="doShare('whatsapp','${url}','${encodedText}','${encodedUrl}')">
+      <div class="share-option-icon" style="background:#25D366">💬</div>
+      <span class="share-option-label">WhatsApp</span>
+    </button>
+    <button class="share-option" onclick="doShare('twitter','${url}','${encodedText}','${encodedUrl}')">
+      <div class="share-option-icon" style="background:#000">✕</div>
+      <span class="share-option-label">X / Twitter</span>
+    </button>
+    <button class="share-option" onclick="doShare('facebook','${url}','${encodedText}','${encodedUrl}')">
+      <div class="share-option-icon" style="background:#1877F2">f</div>
+      <span class="share-option-label">Facebook</span>
+    </button>
+    <button class="share-option" onclick="doShare('copy','${url}','${encodedText}','${encodedUrl}')">
+      <div class="share-option-icon" style="background:var(--surface-2)">🔗</div>
+      <span class="share-option-label">Copy Link</span>
+    </button>
+  `;
+
+  shareOverlay.classList.add('open');
+  shareSheet.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeShareSheet() {
+  shareOverlay.classList.remove('open');
+  shareSheet.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function doShare(platform, url, encodedText, encodedUrl) {
+  const links = {
+    whatsapp: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
+    twitter:  `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  };
+  if (platform === 'copy') {
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('Link copied! 📋');
+      closeShareSheet();
+    });
+  } else {
+    window.open(links[platform], '_blank', 'width=600,height=500');
+    closeShareSheet();
+  }
+  // GA4 track which platform was used
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'share', { method: platform, content_type: 'paper', item_id: url });
+  }
+}
+
 function shareSubject() {
   const subject = allSubjects.find(s => s.id === currentSubjectId);
   if (!subject) return;
   const url = `https://cxcpastpaper.online/?subject=${subject.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}&level=${subject.level}`;
-  const text = `Free ${subject.level} ${subject.name} past papers 📚`;
-  if (navigator.share) {
-    navigator.share({ title: text, text, url }).catch(() => {});
+  // Use native share on mobile, custom sheet on desktop
+  if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+    navigator.share({ title: `Free ${subject.level} ${subject.name} past papers`, url }).catch(() => {});
   } else {
-    navigator.clipboard.writeText(url).then(() => {
-      showToast('Link copied! 📋');
-    }).catch(() => {
-      showToast(url);
-    });
+    openShareSheet(subject.name + ' Past Papers', url, 'subject');
   }
 }
 
 function sharePaper(title, url) {
-  if (navigator.share) {
-    navigator.share({ title: `${title} – Free PDF`, url }).catch(() => {});
+  if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+    navigator.share({ title: title + ' – Free PDF', url }).catch(() => {});
   } else {
-    navigator.clipboard.writeText(url).then(() => showToast('Link copied! 📋'));
+    openShareSheet(title, url, 'paper');
   }
 }
 
