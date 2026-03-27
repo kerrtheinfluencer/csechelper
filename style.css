@@ -456,6 +456,34 @@ img { display: block; max-width: 100%; }
 .paper-download-btn.folder-btn { background: var(--gold-muted); color: var(--green-dark); }
 .paper-download-btn.folder-btn:hover { background: var(--gold); color: var(--green-dark); }
 
+.share-btn {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--ink-muted);
+  border: none;
+  cursor: pointer;
+  font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--trans);
+}
+.share-btn:hover { background: var(--green-dark); color: var(--white); }
+
+.sheet-share {
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(0,102,34,.08);
+  color: var(--green);
+  border: 1.5px solid rgba(0,102,34,.2);
+  font-size: .75rem;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  transition: var(--trans);
+}
+.sheet-share:hover { background: var(--green-dark); color: var(--white); border-color: var(--green-dark); }
+
 /* ─── ABOUT ───────────────────────────────────────────────── */
 .about-section { background: var(--white); border-radius: var(--radius-xl); margin: 0 auto 48px; }
 .about-inner { max-width: 1100px; margin: 0 auto; padding: 48px 20px; }

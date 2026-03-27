@@ -202,6 +202,16 @@ function openSheet(subjectId) {
   sheetLevel.textContent  = subject.level;
   sheetLevel.className    = `sheet-level-badge ${subject.level.toLowerCase()}`;
 
+  // Update URL for SEO deep linking (without page reload)
+  const slug = subject.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const newUrl = `${window.location.pathname}?subject=${slug}&level=${subject.level}`;
+  history.pushState({ subjectId }, '', newUrl);
+
+  // Update page title and meta for this subject
+  document.title = `${subject.level} ${subject.name} Past Papers – Free PDF | CXC Papers`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = `Free ${subject.level} ${subject.name} past papers PDF download. All years. No sign-up required.`;
+
   // Reset year chips
   document.querySelectorAll('.year-chip').forEach(c => {
     c.classList.toggle('active', c.dataset.year === 'all');
@@ -224,6 +234,10 @@ function closeSheet() {
   subjectSheet.classList.remove('open');
   document.body.style.overflow = '';
   currentSubjectId = null;
+
+  // Restore clean URL
+  history.pushState({}, '', window.location.pathname);
+  document.title = 'CXC Past Papers – Free CSEC & CAPE Past Papers PDF Download';
 
   // Restore AI button to normal position
   const aiBtn = document.getElementById('cxcAIBtn');
@@ -291,10 +305,13 @@ function buildSheetPaperItem(p) {
         <div class="paper-title">${escHtml(p.title)}</div>
         <div class="paper-meta">${metaParts}</div>
       </div>
-      ${url
-        ? `<a href="${url}" target="_blank" rel="noopener" class="paper-download-btn ${isFolder ? 'folder-btn' : ''}" onclick="sb.rpc('increment_downloads',{paper_id:'${p.id}'}).catch(()=>{})">${btnLabel}</a>`
-        : `<span class="paper-download-btn" style="opacity:.4;cursor:default">Soon</span>`
-      }
+      <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+        ${url
+          ? `<a href="${url}" target="_blank" rel="noopener" class="paper-download-btn ${isFolder ? 'folder-btn' : ''}" onclick="sb.rpc('increment_downloads',{paper_id:'${p.id}'}).catch(()=>{})">${btnLabel}</a>`
+          : `<span class="paper-download-btn" style="opacity:.4;cursor:default">Soon</span>`
+        }
+        ${url ? `<button class="share-btn" onclick="sharePaper('${escHtml(p.title)}','${url}')" title="Share">↗</button>` : ''}
+      </div>
     </div>`;
 }
 
@@ -357,6 +374,25 @@ function setupSheet() {
   sheetClose.addEventListener('click', closeSheet);
   sheetOverlay.addEventListener('click', closeSheet);
 
+  // Auto-open subject from URL param (for shared links / SEO)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlSubject = urlParams.get('subject');
+  if (urlSubject) {
+    // Wait for data to load then open the sheet
+    const tryOpen = () => {
+      const match = allSubjects.find(s =>
+        s.name.toLowerCase().replace(/[^a-z0-9]+/g,'-') === urlSubject
+      );
+      if (match) openSheet(match.id);
+    };
+    // Retry a few times in case data isn't loaded yet
+    setTimeout(tryOpen, 800);
+    setTimeout(tryOpen, 1800);
+  }
+
+  // Share button
+  document.getElementById('sheetShare').addEventListener('click', shareSubject);
+
   // Swipe down to close
   let startY = 0;
   subjectSheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
@@ -364,6 +400,31 @@ function setupSheet() {
     const diff = e.changedTouches[0].clientY - startY;
     if (diff > 80) closeSheet();
   }, { passive: true });
+}
+
+// ─── SHARE ────────────────────────────────────────────────
+function shareSubject() {
+  const subject = allSubjects.find(s => s.id === currentSubjectId);
+  if (!subject) return;
+  const url = `https://cxcpastpaper.online/?subject=${subject.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}&level=${subject.level}`;
+  const text = `Free ${subject.level} ${subject.name} past papers 📚`;
+  if (navigator.share) {
+    navigator.share({ title: text, text, url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('Link copied! 📋');
+    }).catch(() => {
+      showToast(url);
+    });
+  }
+}
+
+function sharePaper(title, url) {
+  if (navigator.share) {
+    navigator.share({ title: `${title} – Free PDF`, url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('Link copied! 📋'));
+  }
 }
 
 // ─── HELPERS ──────────────────────────────────────────────

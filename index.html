@@ -35,17 +35,39 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <link rel="stylesheet" href="style.css" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="CXC Past Papers – Free CSEC &amp; CAPE Past Papers" />
+  <meta name="twitter:description" content="Every CSEC and CAPE past paper free. No sign-up. No paywall." />
+  <meta name="twitter:url" content="https://cxcpastpaper.online/" />
+
   <script>
-    // Handle ?subject= URL param for SEO deep links
+    // SEO: Handle ?subject= deep links — update meta tags dynamically
     (function() {
       const p = new URLSearchParams(window.location.search);
       const s = p.get('subject');
-      if (s) {
-        const name = s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-        document.title = `CSEC ${name} Past Papers – Free Download | CXC Papers`;
-        const desc = document.querySelector('meta[name="description"]');
-        if (desc) desc.content = `Download free CSEC ${name} past papers and mark schemes. All years available. No sign-up required.`;
-      }
+      if (!s) return;
+      const name = s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+      const level = p.get('level') || 'CSEC';
+      document.title = `${level} ${name} Past Papers – Free PDF Download | CXC Papers`;
+      const setMeta = (sel, val, attr='content') => { const el=document.querySelector(sel); if(el) el.setAttribute(attr,val); };
+      setMeta('meta[name="description"]', `Free ${level} ${name} past papers and mark schemes PDF download. All years. No sign-up required. Caribbean students — start practising today.`);
+      setMeta('meta[property="og:title"]', `${level} ${name} Past Papers – Free Download`);
+      setMeta('meta[property="og:description"]', `Download free ${level} ${name} past papers. All years, no paywall.`);
+      setMeta('meta[property="og:url"]', window.location.href);
+      setMeta('link[rel="canonical"]', window.location.href, 'href');
+      // Inject subject structured data
+      const sd = document.createElement('script');
+      sd.type = 'application/ld+json';
+      sd.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"WebPage",
+        "name":`${level} ${name} Past Papers`,
+        "description":`Free ${level} ${name} past papers for Caribbean students`,
+        "url": window.location.href,
+        "isPartOf":{"@type":"WebSite","url":"https://cxcpastpaper.online"}
+      });
+      document.head.appendChild(sd);
     })();
   </script>
 
@@ -206,6 +228,7 @@
           <span class="sheet-level-badge" id="sheetLevel"></span>
         </div>
       </div>
+      <button class="sheet-share" id="sheetShare" title="Share this subject">Share ↗</button>
       <button class="sheet-close" id="sheetClose">✕</button>
     </div>
 
