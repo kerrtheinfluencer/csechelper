@@ -222,11 +222,12 @@ function openSheet(subjectId) {
   subjectSheet.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Push AI button up so it doesn't overlap sheet
+  // Push AI button above the sheet
   const aiBtn = document.getElementById('cxcAIBtn');
   const aiPanel = document.getElementById('cxcAIPanel');
-  if (aiBtn) aiBtn.style.bottom = '420px';
-  if (aiPanel) { aiPanel.classList.remove('open'); aiPanel.style.bottom = '480px'; }
+  const sheetH = Math.min(window.innerHeight * 0.78, window.innerHeight) + 16;
+  if (aiBtn) aiBtn.style.bottom = sheetH + 'px';
+  if (aiPanel) { aiPanel.classList.remove('open'); aiPanel.style.bottom = (sheetH + 60) + 'px'; }
 }
 
 function closeSheet() {
