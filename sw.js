@@ -3,7 +3,7 @@
    Full offline support — cache-first with network update
    ========================================================= */
 
-const VERSION  = 'cxcpapers-v3';
+const VERSION  = 'cxcpapers-v4';
 const FALLBACK = '/offline.html';
 
 // Files to pre-cache on install
@@ -49,15 +49,9 @@ self.addEventListener('fetch', e => {
   if (request.method !== 'GET') return;
   if (url.protocol === 'chrome-extension:') return;
 
-  // Supabase API — network first, empty fallback if offline
+  // Supabase API — always network, never cache
   if (url.hostname.includes('supabase.co')) {
-    e.respondWith(
-      fetch(request)
-        .catch(() => new Response(
-          JSON.stringify({ data: null, error: { message: 'offline' } }),
-          { headers: { 'Content-Type': 'application/json' } }
-        ))
-    );
+    e.respondWith(fetch(request));
     return;
   }
 

@@ -105,6 +105,13 @@ async function loadData() {
       sb.from('papers').select('*, subjects(name, emoji, level)').order('created_at', { ascending: false })
     ]);
 
+    // Handle offline SW response
+    if (subRes.error?.message === 'offline' || paperRes.error?.message === 'offline') {
+      subjectsGrid.innerHTML = buildEmptyState('📶', 'You're offline', 'Connect to the internet to load subjects and papers.');
+      recentPapers.innerHTML = '';
+      return;
+    }
+
     if (subRes.error) throw subRes.error;
     if (paperRes.error) throw paperRes.error;
 
