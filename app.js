@@ -40,12 +40,15 @@ const installBtn    = document.getElementById('installBtn');
 document.addEventListener('DOMContentLoaded', async () => {
   registerSW();
   setupPWAInstall();
+  setupDarkMode();
+  setupExamCountdown();
   await loadData();
   setupSearch();
   setupLevelFilters();
   setupYearFilters();
   setupSheet();
   trackVisitor();
+  renderRecentlyViewed();
 });
 
 // ─── SERVICE WORKER ───────────────────────────────────────
@@ -212,6 +215,9 @@ function openSheet(subjectId) {
     });
   }
 
+  // Recently viewed
+  addRecentlyViewed(subject);
+
   // Update URL for SEO deep linking (without page reload)
   const slug = subject.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const newUrl = `${window.location.pathname}?subject=${slug}&level=${subject.level}`;
@@ -345,29 +351,7 @@ async function handleDownload(paperId, fileUrl, title) {
   showToast(`Opening: ${title.slice(0, 30)}…`);
 }
 
-// ─── SEARCH ───────────────────────────────────────────────
-function setupSearch() {
-  let timer;
-  searchInput.addEventListener('input', () => {
-    searchQuery = searchInput.value.trim();
-    searchClear.style.display = searchQuery ? 'block' : 'none';
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      renderSubjects();
-      // GA4 — track search (debounced, only when query is 3+ chars)
-      if (searchQuery.length >= 3 && typeof gtag !== 'undefined') {
-        gtag('event', 'search', { search_term: searchQuery });
-      }
-    }, 200);
-  });
-  searchClear.addEventListener('click', () => {
-    searchInput.value = '';
-    searchQuery = '';
-    searchClear.style.display = 'none';
-    renderSubjects();
-    searchInput.focus();
-  });
-}
+// setupSearch is defined above with autocomplete support
 
 // ─── LEVEL FILTERS ────────────────────────────────────────
 function setupLevelFilters() {
@@ -424,6 +408,150 @@ function setupSheet() {
     const diff = e.changedTouches[0].clientY - startY;
     if (diff > 80) closeSheet();
   }, { passive: true });
+}
+
+// ─── DARK MODE ────────────────────────────────────────────
+function setupDarkMode() {
+  const btn = document.getElementById('darkToggle');
+  const isDark = localStorage.getItem('cxc_dark') === '1';
+  if (isDark) { document.body.classList.add('dark'); btn.textContent = '☀️'; }
+
+  btn.addEventListener('click', () => {
+    const dark = document.body.classList.toggle('dark');
+    btn.textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('cxc_dark', dark ? '1' : '0');
+  });
+}
+
+// ─── EXAM COUNTDOWN ───────────────────────────────────────
+function setupExamCountdown() {
+  const el = document.getElementById('examCountdown');
+  if (!el) return;
+  // CSEC May/June exams typically start first Monday of May
+  const examDate = new Date('2025-05-05T08:00:00');
+  const now = new Date();
+  const diff = examDate - now;
+  if (diff <= 0) {
+    el.textContent = '📝 CSEC exams are happening now — good luck!';
+    return;
+  }
+  const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  if (days > 180) { el.style.display = 'none'; return; }
+  if (days === 0) el.innerHTML = `⏰ CSEC exams start <strong>TODAY</strong> — you've got this!`;
+  else if (days === 1) el.innerHTML = `⏰ CSEC exams start <strong>tomorrow</strong> — last chance to practise!`;
+  else el.innerHTML = `⏰ CSEC 2025 exams in <strong>${days} days</strong> — start practising now`;
+}
+
+// ─── SEARCH AUTOCOMPLETE ──────────────────────────────────
+function setupSearch() {
+  const autocomplete = document.getElementById('searchAutocomplete');
+  let timer;
+
+  searchInput.addEventListener('input', () => {
+    searchQuery = searchInput.value.trim();
+    searchClear.style.display = searchQuery ? 'block' : 'none';
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      renderSubjects();
+      renderAutocomplete(searchQuery);
+      if (searchQuery.length >= 3 && typeof gtag !== 'undefined') {
+        gtag('event', 'search', { search_term: searchQuery });
+      }
+    }, 150);
+  });
+
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchQuery = '';
+    searchClear.style.display = 'none';
+    autocomplete.innerHTML = '';
+    renderSubjects();
+    searchInput.focus();
+  });
+
+  // Close autocomplete on outside click
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrap')) {
+      autocomplete.innerHTML = '';
+    }
+  });
+}
+
+function renderAutocomplete(query) {
+  const autocomplete = document.getElementById('searchAutocomplete');
+  if (!autocomplete) return;
+  if (!query || query.length < 1) { autocomplete.innerHTML = ''; return; }
+
+  const matches = allSubjects.filter(s =>
+    s.name.toLowerCase().includes(query.toLowerCase())
+  ).slice(0, 6);
+
+  if (!matches.length) { autocomplete.innerHTML = ''; return; }
+
+  autocomplete.innerHTML = matches.map(s => {
+    const count = allPapers.filter(p => p.subject_id === s.id).length;
+    return `<div class="autocomplete-item" onclick="selectAutocomplete('${s.id}')">
+      <span class="autocomplete-emoji">${s.emoji || '📄'}</span>
+      <span class="autocomplete-name">${s.name}</span>
+      <span class="autocomplete-level ${s.level.toLowerCase()}">${s.level}</span>
+      <span class="autocomplete-count">${count} paper${count !== 1 ? 's' : ''}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectAutocomplete(subjectId) {
+  const subject = allSubjects.find(s => s.id === subjectId);
+  if (!subject) return;
+  const autocomplete = document.getElementById('searchAutocomplete');
+  searchInput.value = subject.name;
+  searchQuery = subject.name;
+  autocomplete.innerHTML = '';
+  openSheet(subjectId);
+}
+
+// ─── RECENTLY VIEWED ──────────────────────────────────────
+const RV_KEY = 'cxc_recent';
+const RV_MAX = 8;
+
+function addRecentlyViewed(subject) {
+  let recent = getRecentlyViewed();
+  // Remove if already exists
+  recent = recent.filter(s => s.id !== subject.id);
+  // Add to front
+  recent.unshift({ id: subject.id, name: subject.name, emoji: subject.emoji, level: subject.level });
+  // Keep max
+  recent = recent.slice(0, RV_MAX);
+  localStorage.setItem(RV_KEY, JSON.stringify(recent));
+  renderRecentlyViewed();
+}
+
+function getRecentlyViewed() {
+  try { return JSON.parse(localStorage.getItem(RV_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function renderRecentlyViewed() {
+  const section = document.getElementById('recentlyViewed');
+  const list    = document.getElementById('recentlyViewedList');
+  if (!section || !list) return;
+
+  const recent = getRecentlyViewed();
+  if (!recent.length) { section.style.display = 'none'; return; }
+
+  section.style.display = 'block';
+  list.innerHTML = recent.map(s => `
+    <div class="rv-chip" onclick="openSheet('${s.id}')">
+      <span class="rv-chip-emoji">${s.emoji || '📄'}</span>
+      <span class="rv-chip-name">${s.name}</span>
+      <span class="rv-chip-level">${s.level}</span>
+    </div>`
+  ).join('');
+
+  document.getElementById('clearRecent').onclick = () => {
+    localStorage.removeItem(RV_KEY);
+    section.style.display = 'none';
+  };
 }
 
 // ─── VISITOR TRACKING ─────────────────────────────────────

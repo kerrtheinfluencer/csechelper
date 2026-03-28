@@ -817,3 +817,215 @@ img { display: block; max-width: 100%; }
   .paper-row { padding: 12px 14px; gap: 10px; }
   .paper-download-btn { padding: 6px 12px; font-size: .72rem; }
 }
+
+/* =========================================================
+   FEATURE UPDATES — dark mode, countdown, autocomplete,
+   recently viewed, WhatsApp CTA, mobile grid improvements
+   ========================================================= */
+
+/* ─── DARK MODE ─────────────────────────────────────────── */
+:root {
+  --bg:        var(--surface);
+  --bg2:       var(--white);
+  --text:      var(--ink);
+  --border:    var(--surface-2);
+}
+body.dark {
+  --surface:   #111;
+  --surface-2: #1e1e1e;
+  --white:     #1a1a1a;
+  --ink:       #f0f0f0;
+  --ink-soft:  #ccc;
+  --ink-muted: #888;
+  background: #111;
+  color: #f0f0f0;
+}
+body.dark .site-header { background: #0a0a0a; }
+body.dark .subject-card { background: #1a1a1a; border-color: #2a2a2a; }
+body.dark .subject-card:hover { border-color: var(--green-light); background: #1e1e1e; }
+body.dark .paper-row { background: #1a1a1a; border-color: #2a2a2a; }
+body.dark .paper-row:hover { background: #222; }
+body.dark .bottom-sheet { background: #1a1a1a; }
+body.dark .sheet-header { border-color: #2a2a2a; }
+body.dark .year-chip { border-color: #333; color: #aaa; }
+body.dark .about-section { background: #1a1a1a; }
+body.dark .about-card { background: #111; }
+body.dark .section-title { color: var(--green-light); }
+body.dark .search-box { background: rgba(255,255,255,.08); box-shadow: 0 4px 24px rgba(0,0,0,.4); }
+body.dark .search-box input { color: #f0f0f0; }
+body.dark .search-autocomplete { background: #1a1a1a; border-color: #333; }
+body.dark .autocomplete-item:hover { background: #222; }
+
+.dark-toggle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.1); border: none;
+  font-size: 1rem; cursor: pointer;
+  transition: var(--trans); display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.dark-toggle:hover { background: rgba(255,255,255,.2); transform: scale(1.1); }
+
+/* ─── EXAM COUNTDOWN ────────────────────────────────────── */
+.exam-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,215,0,.15);
+  border: 1px solid rgba(255,215,0,.3);
+  color: var(--gold);
+  font-size: .78rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: .3px;
+  animation: fadeUp .5s ease both;
+}
+.exam-countdown:empty { display: none; }
+
+/* ─── SEARCH AUTOCOMPLETE ───────────────────────────────── */
+.search-autocomplete {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--surface-2);
+  overflow: hidden;
+  z-index: 50;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.search-autocomplete:empty { display: none !important; }
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+  transition: var(--trans);
+  border-bottom: 1px solid var(--surface-2);
+}
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover { background: var(--surface); }
+.autocomplete-emoji { font-size: 1.1rem; flex-shrink: 0; }
+.autocomplete-name { font-family: 'Syne', sans-serif; font-size: .88rem; font-weight: 700; color: var(--ink); flex: 1; }
+.autocomplete-count { font-size: .72rem; color: var(--ink-muted); flex-shrink: 0; }
+.autocomplete-level { font-size: .65rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; flex-shrink: 0; }
+.autocomplete-level.csec { background: rgba(0,102,34,.1); color: var(--green); }
+.autocomplete-level.cape { background: rgba(255,215,0,.15); color: var(--gold-muted); }
+
+/* ─── RECENTLY VIEWED ───────────────────────────────────── */
+.recently-viewed-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+.recently-viewed-list::-webkit-scrollbar { display: none; }
+.rv-chip {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--surface-2);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--trans);
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+.rv-chip:hover { border-color: var(--green-light); background: var(--surface); }
+.rv-chip-emoji { font-size: .95rem; }
+.rv-chip-name { font-size: .8rem; font-weight: 600; color: var(--ink); }
+.rv-chip-level { font-size: .65rem; color: var(--ink-muted); }
+.clear-recent-btn {
+  font-size: .75rem; color: var(--ink-muted); background: none;
+  border: none; cursor: pointer; padding: 4px 8px;
+  border-radius: 6px; transition: var(--trans);
+}
+.clear-recent-btn:hover { color: var(--ink); background: var(--surface-2); }
+
+/* ─── WHATSAPP CTA ──────────────────────────────────────── */
+.whatsapp-cta {
+  background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+  padding: 28px 20px;
+}
+.whatsapp-cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.whatsapp-icon { font-size: 2.5rem; flex-shrink: 0; }
+.whatsapp-text { flex: 1; min-width: 200px; }
+.whatsapp-text h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.whatsapp-text p { font-size: .82rem; color: rgba(255,255,255,.75); line-height: 1.5; }
+.whatsapp-btn {
+  flex-shrink: 0;
+  padding: 12px 28px;
+  background: #25D366;
+  color: #fff;
+  border-radius: 25px;
+  font-family: 'Syne', sans-serif;
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--trans);
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+}
+.whatsapp-btn:hover { background: #20bc59; transform: translateY(-2px); color: #fff; }
+
+/* ─── MOBILE GRID IMPROVEMENTS ─────────────────────────── */
+@media (max-width: 480px) {
+  .subjects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+  .subject-card {
+    padding: 14px 12px;
+  }
+  .subject-name {
+    font-size: .82rem;
+  }
+  .subject-emoji {
+    font-size: 1.3rem;
+  }
+  .card-arrow {
+    width: 24px; height: 24px;
+    font-size: .75rem;
+  }
+  /* Stack hero content better on small screens */
+  .hero { padding: 32px 16px 0; }
+  .hero-title { font-size: 1.6rem; }
+  .hero-badge { font-size: .68rem; }
+  /* Stats bar compact */
+  .stats-bar { padding: 10px 12px; gap: 0; }
+  .stat { padding: 0 10px; }
+  .stat-num { font-size: .95rem; }
+  .stat-label { font-size: .58rem; }
+  /* WhatsApp CTA stacked */
+  .whatsapp-cta-inner { flex-direction: column; text-align: center; gap: 14px; }
+  .whatsapp-btn { width: 100%; text-align: center; }
+  /* Header compact */
+  .dark-toggle { width: 30px; height: 30px; font-size: .85rem; }
+}
+
+@media (max-width: 360px) {
+  .subjects-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .subject-card { padding: 12px 10px; }
+}

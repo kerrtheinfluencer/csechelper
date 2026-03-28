@@ -21,7 +21,7 @@
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -114,6 +114,7 @@
         <a href="#about" class="nav-link">About</a>
         <a href="/contribute.html" class="nav-link" style="color:var(--gold)">+ Contribute</a>
       </nav>
+      <button class="dark-toggle" id="darkToggle" title="Toggle dark mode">🌙</button>
       <button class="install-btn" id="installBtn" style="display:none">⬇ Install App</button>
     </div>
   </header>
@@ -123,6 +124,7 @@
     <div class="hero-bg-pattern"></div>
     <div class="hero-content">
       <div class="hero-badge">🇯🇲 Built for the Caribbean</div>
+      <div class="exam-countdown" id="examCountdown"></div>
       <h1 class="hero-title">Every CXC Past Paper.<br><span class="hero-accent">Free. Fast. Forever.</span></h1>
       <p class="hero-sub">CSEC & CAPE past papers and mark schemes — all in one place. No sign-up. No paywall. Just papers.</p>
 
@@ -133,6 +135,7 @@
           <input type="text" id="searchInput" placeholder="Search subject e.g. Mathematics, Biology…" autocomplete="off" />
           <button class="search-clear" id="searchClear" style="display:none">✕</button>
         </div>
+        <div class="search-autocomplete" id="searchAutocomplete"></div>
       </div>
 
       <!-- Quick Filters -->
@@ -187,6 +190,15 @@
     <div class="subjects-grid" id="subjectsGrid">
       <!-- populated by JS -->
     </div>
+  </section>
+
+  <!-- ░░ RECENTLY VIEWED ░░ -->
+  <section class="section" id="recentlyViewed" style="display:none; padding-top:0">
+    <div class="section-header">
+      <h2 class="section-title">Recently Viewed</h2>
+      <button class="clear-recent-btn" id="clearRecent">Clear</button>
+    </div>
+    <div class="recently-viewed-list" id="recentlyViewedList"></div>
   </section>
 
   <!-- ░░ AD SLOT 2 ░░ -->
@@ -291,6 +303,18 @@
 
   <!-- ░░ TOAST ░░ -->
   <div class="toast" id="toast"></div>
+
+  <!-- ░░ WHATSAPP CTA ░░ -->
+  <section class="whatsapp-cta">
+    <div class="whatsapp-cta-inner">
+      <div class="whatsapp-icon">💬</div>
+      <div class="whatsapp-text">
+        <h3>Join our WhatsApp Study Group</h3>
+        <p>Get notified when new papers drop. Share tips with Caribbean students.</p>
+      </div>
+      <a href="https://chat.whatsapp.com/YOUR_GROUP_LINK" target="_blank" rel="noopener" class="whatsapp-btn" id="whatsappBtn">Join Free</a>
+    </div>
+  </section>
 
   <!-- ░░ FOOTER ░░ -->
   <footer class="site-footer">
