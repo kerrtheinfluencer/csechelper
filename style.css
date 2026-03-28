@@ -929,7 +929,14 @@ body.dark {
   color: #f0f0f0;
 }
 body.dark { background: #0d1a0d; background-image: radial-gradient(ellipse at 15% 20%, rgba(0,120,40,.2) 0%, transparent 45%), radial-gradient(ellipse at 85% 10%, rgba(255,215,0,.06) 0%, transparent 40%), radial-gradient(ellipse at 50% 80%, rgba(0,60,20,.2) 0%, transparent 50%); }
-body.dark .site-header { background: rgba(0,15,5,.8); backdrop-filter: var(--blur-heavy); -webkit-backdrop-filter: var(--blur-heavy); }
+body.dark .site-header { background: rgba(0,15,5,.85); backdrop-filter: var(--blur-heavy); -webkit-backdrop-filter: var(--blur-heavy); border-bottom-color: rgba(255,215,0,.2); }
+body.dark .logo-main { color: #fff; }
+body.dark .logo-sub  { color: rgba(255,215,0,.8); }
+body.dark .nav-link  { color: rgba(255,255,255,.75); }
+body.dark .nav-link:hover { color: #fff; background: rgba(255,255,255,.1); }
+body.dark .install-btn { background: var(--gold); color: #004d1a; }
+body.dark .dark-toggle { background: rgba(255,255,255,.1); color: rgba(255,255,255,.8); }
+body.dark .dark-toggle:hover { background: rgba(255,255,255,.18); color: #fff; }
 body.dark .hero { background: linear-gradient(180deg, rgba(0,30,10,.95) 0%, rgba(0,40,15,.9) 100%); }
 body.dark .subject-card { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); }
 body.dark .subject-card:hover { background: rgba(255,255,255,.1); border-color: rgba(0,179,60,.3); }

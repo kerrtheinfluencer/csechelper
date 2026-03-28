@@ -54,9 +54,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // ─── SERVICE WORKER ───────────────────────────────────────
 function registerSW() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(console.warn);
-  }
+  if (!('serviceWorker' in navigator)) return;
+
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    // Tell waiting SW to activate immediately
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // New version available — show update toast
+          showToast('🔄 Update available — refreshing…');
+          setTimeout(() => {
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+            window.location.reload();
+          }, 1500);
+        }
+      });
+    });
+  }).catch(console.warn);
+
+  // Track online/offline status
+  window.addEventListener('offline', () => showToast('📶 You're offline — cached papers still work'));
+  window.addEventListener('online',  () => showToast('✅ Back online!'));
 }
 
 // ─── PWA INSTALL ──────────────────────────────────────────

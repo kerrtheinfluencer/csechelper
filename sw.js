@@ -1,58 +1,132 @@
 /* =========================================================
-   CXC PAST PAPERS — sw.js  (Service Worker)
+   CXC PAST PAPERS — sw.js
+   Full offline support — cache-first with network update
    ========================================================= */
 
-const CACHE = 'cxcpapers-v1';
-const PRECACHE = [
+const VERSION  = 'cxcpapers-v3';
+const FALLBACK = '/offline.html';
+
+// Files to pre-cache on install
+const SHELL = [
   '/',
   '/index.html',
   '/style.css',
   '/app.js',
+  '/brain.js',
+  '/ai-search.js',
   '/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap'
+  '/offline.html',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
 ];
 
-// Install — pre-cache shell
+// ── Install: cache the app shell ─────────────────────────
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches.open(VERSION)
+      .then(c => c.addAll(SHELL.filter(u => !u.startsWith('https://cdn'))))
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate — clean old caches
+// ── Activate: purge old caches ────────────────────────────
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch — network-first for API, cache-first for assets
+// ── Fetch strategy ─────────────────────────────────────────
 self.addEventListener('fetch', e => {
-  const url = new URL(e.request.url);
+  const { request } = e;
+  const url = new URL(request.url);
 
-  // Always network for Supabase API calls
-  if (url.hostname.includes('supabase')) {
-    e.respondWith(fetch(e.request).catch(() => new Response('{}', { headers: { 'Content-Type': 'application/json' } })));
+  // Skip non-GET and chrome-extension requests
+  if (request.method !== 'GET') return;
+  if (url.protocol === 'chrome-extension:') return;
+
+  // Supabase API — network first, empty fallback if offline
+  if (url.hostname.includes('supabase.co')) {
+    e.respondWith(
+      fetch(request)
+        .catch(() => new Response(
+          JSON.stringify({ data: null, error: { message: 'offline' } }),
+          { headers: { 'Content-Type': 'application/json' } }
+        ))
+    );
     return;
   }
 
-  // Cache-first for static assets
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      return fetch(e.request).then(res => {
-        // Cache successful GET responses
-        if (e.request.method === 'GET' && res.status === 200) {
+  // Google Fonts — cache first
+  if (url.hostname.includes('fonts.goog') || url.hostname.includes('fonts.gstatic')) {
+    e.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
+        return fetch(request).then(res => {
           const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
+          caches.open(VERSION).then(c => c.put(request, clone));
+          return res;
+        });
+      })
+    );
+    return;
+  }
+
+  // CDN resources (Transformers.js, Supabase client) — cache after first load
+  if (url.hostname.includes('jsdelivr') || url.hostname.includes('cdnjs') || url.hostname.includes('unpkg')) {
+    e.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
+        return fetch(request).then(res => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(VERSION).then(c => c.put(request, clone));
+          }
+          return res;
+        }).catch(() => caches.match(request));
+      })
+    );
+    return;
+  }
+
+  // App shell (HTML, CSS, JS, images) — stale-while-revalidate
+  // Serve from cache immediately, update cache in background
+  e.respondWith(
+    caches.open(VERSION).then(async cache => {
+      const cached = await cache.match(request);
+
+      const fetchPromise = fetch(request).then(res => {
+        if (res.ok && res.status === 200) {
+          cache.put(request, res.clone());
         }
         return res;
-      }).catch(() => {
-        // Offline fallback for navigation
-        if (e.request.mode === 'navigate') return caches.match('/index.html');
-      });
+      }).catch(() => null);
+
+      // Return cached immediately if available, otherwise wait for network
+      if (cached) {
+        // Background update
+        fetchPromise;
+        return cached;
+      }
+
+      // No cache — wait for network
+      const fresh = await fetchPromise;
+      if (fresh) return fresh;
+
+      // Both failed — show offline page for navigation, empty for assets
+      if (request.mode === 'navigate') {
+        return cache.match(FALLBACK) || new Response('Offline', { status: 503 });
+      }
+      return new Response('', { status: 503 });
     })
   );
+});
+
+// ── Background sync for when connection returns ───────────
+self.addEventListener('message', e => {
+  if (e.data?.type === 'SKIP_WAITING') self.skipWaiting();
 });
