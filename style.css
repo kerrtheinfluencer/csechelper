@@ -1029,3 +1029,157 @@ body.dark .autocomplete-item:hover { background: #222; }
   .subjects-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .subject-card { padding: 12px 10px; }
 }
+
+/* ─── EXAM TIMER BAR ─────────────────────────────────────── */
+.exam-timer-bar {
+  position: fixed;
+  top: 62px;
+  left: 0; right: 0;
+  z-index: 150;
+  background: var(--green-dark);
+  border-bottom: 2px solid var(--gold);
+  transform: translateY(-100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.exam-timer-bar.visible { transform: translateY(0); }
+.exam-timer-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.exam-timer-icon { font-size: 1.2rem; flex-shrink: 0; }
+.exam-timer-info { flex: 1; display: flex; flex-direction: column; }
+.exam-timer-label { font-size: .65rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; font-family: 'Syne', sans-serif; }
+.exam-timer-title { font-size: .78rem; color: rgba(255,255,255,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'DM Sans', sans-serif; }
+.exam-timer-display {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gold);
+  flex-shrink: 0;
+  min-width: 80px;
+  text-align: right;
+  transition: color .3s;
+}
+.exam-timer-stop {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.6);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; flex-shrink: 0;
+  transition: var(--trans);
+}
+.exam-timer-stop:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+.timer-btn {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(0,102,34,.1);
+  color: var(--green);
+  border: 1.5px solid rgba(0,102,34,.2);
+  cursor: pointer;
+  font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--trans);
+}
+.timer-btn:hover { background: var(--green-dark); color: var(--white); border-color: var(--green-dark); }
+
+/* ─── EMAIL CAPTURE MODAL ────────────────────────────────── */
+.email-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  backdrop-filter: blur(3px);
+  padding: 0;
+}
+.email-modal-overlay.visible { opacity: 1; pointer-events: all; }
+
+.email-modal {
+  background: var(--white);
+  border-radius: 20px 20px 0 0;
+  padding: 28px 24px 36px;
+  width: min(500px, 100vw);
+  text-align: center;
+  position: relative;
+  transform: translateY(40px);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.email-modal-overlay.visible .email-modal { transform: translateY(0); }
+
+.email-modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: none; cursor: pointer;
+  color: var(--ink-muted); font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--trans);
+}
+.email-modal-close:hover { background: var(--surface); color: var(--ink); }
+.email-modal-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.email-modal h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  margin-bottom: 8px;
+}
+.email-modal p {
+  font-size: .84rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.email-modal-form {
+  display: flex;
+  gap: 8px;
+  max-width: 380px;
+  margin: 0 auto 10px;
+}
+.email-modal-form input {
+  flex: 1;
+  padding: 11px 16px;
+  border: 2px solid var(--surface-2);
+  border-radius: var(--radius-md);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .88rem;
+  outline: none;
+  transition: var(--trans);
+  color: var(--ink);
+  background: var(--white);
+}
+.email-modal-form input:focus { border-color: var(--green-light); }
+.email-modal-form button {
+  padding: 11px 20px;
+  background: var(--green-dark);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Syne', sans-serif;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--trans);
+}
+.email-modal-form button:hover { background: var(--green-mid); }
+.email-modal-form button:disabled { opacity: .5; cursor: not-allowed; }
+.email-modal-note { font-size: .7rem !important; color: var(--ink-muted) !important; margin-bottom: 0 !important; }

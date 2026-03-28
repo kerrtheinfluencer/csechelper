@@ -51,10 +51,11 @@
   <meta name="twitter:url" content="https://cxcpastpaper.online/" />
 
   <script>
-    // SEO: Handle ?subject= deep links — update meta tags dynamically
+    // SEO: Handle /subject/slug AND ?subject= deep links
     (function() {
+      const pathMatch = window.location.pathname.match(/^\/subject\/(.+)/);
       const p = new URLSearchParams(window.location.search);
-      const s = p.get('subject');
+      const s = pathMatch ? pathMatch[1] : p.get('subject');
       if (!s) return;
       const name = s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
       const level = p.get('level') || 'CSEC';

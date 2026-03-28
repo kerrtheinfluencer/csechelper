@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupSheet();
   trackVisitor();
   renderRecentlyViewed();
+  showEmailCapture();
 });
 
 // ─── SERVICE WORKER ───────────────────────────────────────
@@ -218,9 +219,9 @@ function openSheet(subjectId) {
   // Recently viewed
   addRecentlyViewed(subject);
 
-  // Update URL for SEO deep linking (without page reload)
+  // Update URL — clean SEO-friendly path
   const slug = subject.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const newUrl = `${window.location.pathname}?subject=${slug}&level=${subject.level}`;
+  const newUrl = `/subject/${slug}`;
   history.pushState({ subjectId }, '', newUrl);
 
   // Update page title and meta for this subject
@@ -253,7 +254,7 @@ function closeSheet() {
   currentSubjectId = null;
 
   // Restore clean URL
-  history.pushState({}, '', window.location.pathname);
+  history.pushState({}, '', '/');
   document.title = 'CXC Past Papers – Free CSEC & CAPE Past Papers PDF Download';
 
   // Restore AI button to normal position
@@ -382,21 +383,29 @@ function setupSheet() {
   sheetClose.addEventListener('click', closeSheet);
   sheetOverlay.addEventListener('click', closeSheet);
 
-  // Auto-open subject from URL param (for shared links / SEO)
+  // Auto-open subject from clean URL /subject/slug OR ?subject= param
+  const pathMatch = window.location.pathname.match(/^\/subject\/(.+)/);
   const urlParams = new URLSearchParams(window.location.search);
-  const urlSubject = urlParams.get('subject');
-  if (urlSubject) {
-    // Wait for data to load then open the sheet
+  const urlSlug = pathMatch ? pathMatch[1] : urlParams.get('subject');
+  if (urlSlug) {
     const tryOpen = () => {
       const match = allSubjects.find(s =>
-        s.name.toLowerCase().replace(/[^a-z0-9]+/g,'-') === urlSubject
+        s.name.toLowerCase().replace(/[^a-z0-9]+/g,'-') === urlSlug
       );
       if (match) openSheet(match.id);
     };
-    // Retry a few times in case data isn't loaded yet
     setTimeout(tryOpen, 800);
     setTimeout(tryOpen, 1800);
   }
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', (e) => {
+    if (e.state?.subjectId) {
+      openSheet(e.state.subjectId);
+    } else {
+      closeSheet();
+    }
+  });
 
   // Share button
   document.getElementById('sheetShare').addEventListener('click', shareSubject);
