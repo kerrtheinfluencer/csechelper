@@ -429,23 +429,19 @@ function setupSheet() {
 // ─── VISITOR TRACKING ─────────────────────────────────────
 async function trackVisitor() {
   try {
-    // Generate a privacy-friendly fingerprint (no IP, no personal data)
-    const raw = [
-      navigator.language,
-      screen.width + 'x' + screen.height,
-      Intl.DateTimeFormat().resolvedOptions().timeZone,
-      navigator.hardwareConcurrency || 0,
-    ].join('|');
-
-    // Hash it
-    const msgBuffer = new TextEncoder().encode(raw);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const visitorId = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+    // Use a stable localStorage ID so the same person always counts once
+    let visitorId = localStorage.getItem('cxc_vid');
+    if (!visitorId) {
+      // Generate a random stable ID on first visit
+      const arr = new Uint8Array(16);
+      crypto.getRandomValues(arr);
+      visitorId = Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+      localStorage.setItem('cxc_vid', visitorId);
+    }
 
     const { data, error } = await sb.rpc('track_visitor', { v_id: visitorId });
-    if (!error && data && statVisitors) {
-      statVisitors.textContent = data.toLocaleString();
+    if (!error && data !== null && statVisitors) {
+      statVisitors.textContent = Number(data).toLocaleString();
     }
   } catch (e) {
     // Silently fail — visitor tracking is non-critical
