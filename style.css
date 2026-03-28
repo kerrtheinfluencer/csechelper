@@ -116,7 +116,7 @@ img { display: block; max-width: 100%; }
 .hero {
   position: relative;
   background: var(--green-dark);
-  padding: 60px 20px 0;
+  padding: 72px 20px 0;
   overflow: hidden;
 }
 .hero-bg-pattern {
@@ -132,6 +132,7 @@ img { display: block; max-width: 100%; }
   max-width: 700px;
   margin: 0 auto;
   text-align: center;
+  padding-bottom: 40px;
 }
 .hero-badge {
   display: inline-flex;
@@ -172,6 +173,7 @@ img { display: block; max-width: 100%; }
 .search-wrap {
   animation: fadeUp .5s .3s ease both;
   margin-bottom: 16px;
+  position: relative;
 }
 .search-box {
   display: flex;
@@ -841,6 +843,7 @@ body.dark {
   color: #f0f0f0;
 }
 body.dark .site-header { background: #0a0a0a; }
+body.dark .hero { background: var(--green-dark); }
 body.dark .subject-card { background: #1a1a1a; border-color: #2a2a2a; }
 body.dark .subject-card:hover { border-color: var(--green-light); background: #1e1e1e; }
 body.dark .paper-row { background: #1a1a1a; border-color: #2a2a2a; }
