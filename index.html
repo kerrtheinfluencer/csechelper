@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CXC Past Papers – Free CSEC & CAPE Past Papers PDF Download</title>
-  <meta name="description" content="Download free CSEC and CAPE past papers PDFs for Mathematics, English, Biology, Chemistry, Physics and 20+ subjects. Updated 2025. No sign-up required." />
-  <meta name="keywords" content="CSEC past papers, CAPE past papers, CXC past papers, CSEC Mathematics past papers, CSEC English past papers, CSEC Biology, CSEC Chemistry, CSEC Physics, free past papers Jamaica, Caribbean exam papers PDF, CXC exam papers 2024 2025" />
+  <meta name="description" content="Download free CSEC and CAPE past papers PDFs for Mathematics, English, Biology, Chemistry, Physics and 20+ subjects. Updated 2026. No sign-up required." />
+  <meta name="keywords" content="CSEC past papers, CAPE past papers, CXC past papers, CSEC Mathematics past papers, CSEC English past papers, CSEC Biology, CSEC Chemistry, CSEC Physics, free past papers Jamaica, Caribbean exam papers PDF, CXC exam papers 2024 2025 2026" />
   <meta name="theme-color" content="#006400" />
   <link rel="canonical" href="https://cxcpastpaper.online/" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
@@ -18,17 +18,28 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://cxcpastpaper.online/" />
 
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="CXC Past Papers – Free CSEC &amp; CAPE Past Papers" />
+  <meta name="twitter:description" content="Every CSEC and CAPE past paper free. No sign-up. No paywall." />
+  <meta name="twitter:url" content="https://cxcpastpaper.online/" />
+
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 
-  <!-- Fonts -->
+  <!-- Preconnect for critical origins only -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  <!-- Google Analytics -->
+  <!-- Non-render-blocking font load -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" /></noscript>
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Analytics: async, non-blocking -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3XEYK73KY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -37,21 +48,11 @@
     gtag('config', 'G-P3XEYK73KY');
   </script>
 
-  <!-- Google AdSense -->
+  <!-- AdSense: async -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9656521698490533" crossorigin="anonymous"></script>
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <link rel="stylesheet" href="style.css" />
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="CXC Past Papers – Free CSEC &amp; CAPE Past Papers" />
-  <meta name="twitter:description" content="Every CSEC and CAPE past paper free. No sign-up. No paywall." />
-  <meta name="twitter:url" content="https://cxcpastpaper.online/" />
-
+  <!-- SEO: deep link handler -->
   <script>
-    // SEO: Handle /subject/slug AND ?subject= deep links
     (function() {
       const pathMatch = window.location.pathname.match(/^\/subject\/(.+)/);
       const p = new URLSearchParams(window.location.search);
@@ -66,12 +67,10 @@
       setMeta('meta[property="og:description"]', `Download free ${level} ${name} past papers. All years, no paywall.`);
       setMeta('meta[property="og:url"]', window.location.href);
       setMeta('link[rel="canonical"]', window.location.href, 'href');
-      // Inject subject structured data
       const sd = document.createElement('script');
       sd.type = 'application/ld+json';
       sd.textContent = JSON.stringify({
-        "@context":"https://schema.org",
-        "@type":"WebPage",
+        "@context":"https://schema.org","@type":"WebPage",
         "name":`${level} ${name} Past Papers`,
         "description":`Free ${level} ${name} past papers for Caribbean students`,
         "url": window.location.href,
@@ -83,23 +82,11 @@
 
   <!-- Structured Data -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "CXC Past Papers",
-    "url": "https://cxcpastpaper.online",
-    "description": "Free CSEC and CAPE past papers for Caribbean students",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://cxcpastpaper.online/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
+  {"@context":"https://schema.org","@type":"WebSite","name":"CXC Past Papers","url":"https://cxcpastpaper.online","description":"Free CSEC and CAPE past papers for Caribbean students","potentialAction":{"@type":"SearchAction","target":"https://cxcpastpaper.online/?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
 </head>
 <body>
 
-  <!-- ░░ HEADER ░░ -->
   <header class="site-header">
     <div class="header-inner">
       <div class="logo">
@@ -120,7 +107,6 @@
     </div>
   </header>
 
-  <!-- ░░ HERO ░░ -->
   <section class="hero">
     <div class="hero-bg-pattern"></div>
     <div class="hero-content">
@@ -128,8 +114,6 @@
       <div class="exam-countdown" id="examCountdown"></div>
       <h1 class="hero-title">Every CXC Past Paper.<br><span class="hero-accent">Free. Fast. Forever.</span></h1>
       <p class="hero-sub">CSEC & CAPE past papers and mark schemes — all in one place. No sign-up. No paywall. Just papers.</p>
-
-      <!-- Search Bar -->
       <div class="search-wrap">
         <div class="search-box">
           <span class="search-icon">🔍</span>
@@ -138,63 +122,77 @@
         </div>
         <div class="search-autocomplete" id="searchAutocomplete"></div>
       </div>
-
-      <!-- Quick Filters -->
       <div class="quick-filters">
         <button class="filter-chip active" data-level="all">All</button>
         <button class="filter-chip" data-level="CSEC">CSEC</button>
         <button class="filter-chip" data-level="CAPE">CAPE</button>
       </div>
     </div>
-
-    <!-- Stats Bar -->
     <div class="stats-bar">
       <div class="stat"><span class="stat-num" id="statPapers">—</span><span class="stat-label">Papers</span></div>
       <div class="stat-divider"></div>
       <div class="stat"><span class="stat-num" id="statSubjects">—</span><span class="stat-label">Subjects</span></div>
       <div class="stat-divider"></div>
-      <div class="stat">
-        <span class="stat-num" id="statVisitors">—</span>
-        <span class="stat-label">Today's Visitors</span>
-      </div>
+      <div class="stat"><span class="stat-num" id="statVisitors">—</span><span class="stat-label">Today's Visitors</span></div>
       <div class="stat-divider"></div>
       <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
     </div>
   </section>
 
-  <!-- ░░ AD SLOT 1 ░░ -->
+  <!-- SEO static content for Googlebot -->
+  <noscript>
+    <section style="padding:2rem;max-width:900px;margin:0 auto;">
+      <h2>Browse CXC Past Papers by Subject</h2>
+      <p>Free CSEC and CAPE past papers for Caribbean students. No sign-up. No paywall.</p>
+      <h3>CSEC Subjects</h3>
+      <ul>
+        <li><a href="/subject/mathematics">CSEC Mathematics Past Papers</a></li>
+        <li><a href="/subject/english-a">CSEC English A Past Papers</a></li>
+        <li><a href="/subject/english-b">CSEC English B Past Papers</a></li>
+        <li><a href="/subject/biology">CSEC Biology Past Papers</a></li>
+        <li><a href="/subject/chemistry">CSEC Chemistry Past Papers</a></li>
+        <li><a href="/subject/physics">CSEC Physics Past Papers</a></li>
+        <li><a href="/subject/principles-of-accounts">CSEC Principles of Accounts Past Papers</a></li>
+        <li><a href="/subject/principles-of-business">CSEC Principles of Business Past Papers</a></li>
+        <li><a href="/subject/caribbean-history">CSEC Caribbean History Past Papers</a></li>
+        <li><a href="/subject/geography">CSEC Geography Past Papers</a></li>
+        <li><a href="/subject/information-technology">CSEC Information Technology Past Papers</a></li>
+        <li><a href="/subject/social-studies">CSEC Social Studies Past Papers</a></li>
+        <li><a href="/subject/human-and-social-biology">CSEC Human and Social Biology Past Papers</a></li>
+        <li><a href="/subject/additional-mathematics">CSEC Additional Mathematics Past Papers</a></li>
+        <li><a href="/subject/integrated-science">CSEC Integrated Science Past Papers</a></li>
+        <li><a href="/subject/agricultural-science">CSEC Agricultural Science Past Papers</a></li>
+        <li><a href="/subject/spanish">CSEC Spanish Past Papers</a></li>
+        <li><a href="/subject/french">CSEC French Past Papers</a></li>
+        <li><a href="/subject/edpm">CSEC EDPM Past Papers</a></li>
+        <li><a href="/subject/office-administration">CSEC Office Administration Past Papers</a></li>
+        <li><a href="/subject/technical-drawing">CSEC Technical Drawing Past Papers</a></li>
+        <li><a href="/subject/physical-education">CSEC Physical Education Past Papers</a></li>
+        <li><a href="/subject/music">CSEC Music Past Papers</a></li>
+        <li><a href="/subject/visual-arts">CSEC Visual Arts Past Papers</a></li>
+      </ul>
+      <h3>CAPE Subjects</h3>
+      <ul>
+        <li><a href="/subject/cape-economics">CAPE Economics Past Papers</a></li>
+      </ul>
+    </section>
+  </noscript>
+
+  <!-- Ad Slot 1 -->
   <div id="adTop" style="overflow:hidden;max-height:0;transition:max-height .3s ease;">
-    <ins class="adsbygoogle"
-         style="display:block;min-height:0;"
-         data-ad-client="ca-pub-9656521698490533"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-      // Expand when filled
-      setTimeout(function(){
-        var ins = document.querySelector('#adTop ins');
-        if(ins && ins.getAttribute('data-ad-status') === 'filled') {
-          document.getElementById('adTop').style.maxHeight = '200px';
-        }
-      }, 3000);
-    </script>
+    <ins class="adsbygoogle" style="display:block;min-height:0;" data-ad-client="ca-pub-9656521698490533" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});setTimeout(function(){var i=document.querySelector('#adTop ins');if(i&&i.getAttribute('data-ad-status')==='filled')document.getElementById('adTop').style.maxHeight='200px';},3000);</script>
   </div>
 
-  <!-- ░░ SUBJECTS GRID ░░ -->
   <section class="section" id="subjects">
     <div class="section-header">
       <h2 class="section-title">Browse by Subject</h2>
       <span class="section-count" id="subjectCount"></span>
     </div>
-    <div class="subjects-grid" id="subjectsGrid">
-      <!-- populated by JS -->
-    </div>
+    <div class="subjects-grid" id="subjectsGrid"></div>
   </section>
 
-  <!-- ░░ RECENTLY VIEWED ░░ -->
-  <section class="section" id="recentlyViewed" style="display:none; padding-top:0">
+  <section class="section" id="recentlyViewed" style="display:none;padding-top:0">
     <div class="section-header">
       <h2 class="section-title">Recently Viewed</h2>
       <button class="clear-recent-btn" id="clearRecent">Clear</button>
@@ -202,65 +200,30 @@
     <div class="recently-viewed-list" id="recentlyViewedList"></div>
   </section>
 
-  <!-- ░░ AD SLOT 2 ░░ -->
+  <!-- Ad Slot 2 -->
   <div id="adMid" style="overflow:hidden;max-height:0;transition:max-height .3s ease;">
-    <ins class="adsbygoogle"
-         style="display:block;min-height:0;"
-         data-ad-client="ca-pub-9656521698490533"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-      setTimeout(function(){
-        var ins = document.querySelector('#adMid ins');
-        if(ins && ins.getAttribute('data-ad-status') === 'filled') {
-          document.getElementById('adMid').style.maxHeight = '200px';
-        }
-      }, 3000);
-    </script>
+    <ins class="adsbygoogle" style="display:block;min-height:0;" data-ad-client="ca-pub-9656521698490533" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});setTimeout(function(){var i=document.querySelector('#adMid ins');if(i&&i.getAttribute('data-ad-status')==='filled')document.getElementById('adMid').style.maxHeight='200px';},3000);</script>
   </div>
 
-  <!-- ░░ RECENT PAPERS ░░ -->
   <section class="section" id="recent">
-    <div class="section-header">
-      <h2 class="section-title">Recently Added</h2>
-    </div>
-    <div class="papers-list" id="recentPapers">
-      <!-- populated by JS -->
-    </div>
+    <div class="section-header"><h2 class="section-title">Recently Added</h2></div>
+    <div class="papers-list" id="recentPapers"></div>
   </section>
 
-  <!-- ░░ ABOUT ░░ -->
   <section class="section about-section" id="about">
     <div class="about-inner">
       <h2 class="section-title">Why CXC Papers?</h2>
       <div class="about-grid">
-        <div class="about-card">
-          <span class="about-icon">⚡</span>
-          <h3>Instant Access</h3>
-          <p>No sign-up. No email. No paywall. Click a subject and get your paper in seconds.</p>
-        </div>
-        <div class="about-card">
-          <span class="about-icon">📱</span>
-          <h3>Works Offline</h3>
-          <p>Install as an app and access papers even without internet. Perfect for study sessions anywhere.</p>
-        </div>
-        <div class="about-card">
-          <span class="about-icon">🎯</span>
-          <h3>Mark Schemes Too</h3>
-          <p>Not just the questions — we have mark schemes so you can check your answers and understand the grading.</p>
-        </div>
-        <div class="about-card">
-          <span class="about-icon">🌍</span>
-          <h3>All Caribbean</h3>
-          <p>Built for Jamaica, Trinidad, Barbados, Guyana, and every Caribbean territory sitting CXC exams.</p>
-        </div>
+        <div class="about-card"><span class="about-icon">⚡</span><h3>Instant Access</h3><p>No sign-up. No email. No paywall. Click a subject and get your paper in seconds.</p></div>
+        <div class="about-card"><span class="about-icon">📱</span><h3>Works Offline</h3><p>Install as an app and access papers even without internet. Perfect for study sessions anywhere.</p></div>
+        <div class="about-card"><span class="about-icon">🎯</span><h3>Mark Schemes Too</h3><p>Not just the questions — we have mark schemes so you can check your answers and understand the grading.</p></div>
+        <div class="about-card"><span class="about-icon">🌍</span><h3>All Caribbean</h3><p>Built for Jamaica, Trinidad, Barbados, Guyana, and every Caribbean territory sitting CXC exams.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ░░ SUBJECT SHEET ░░ -->
+  <!-- Subject Sheet -->
   <div class="sheet-overlay" id="sheetOverlay"></div>
   <div class="bottom-sheet" id="subjectSheet">
     <div class="sheet-handle"></div>
@@ -275,8 +238,6 @@
       <button class="sheet-share" id="sheetShare" title="Share this subject">Share ↗</button>
       <button class="sheet-close" id="sheetClose">✕</button>
     </div>
-
-    <!-- Year filter inside sheet -->
     <div class="sheet-filters">
       <button class="year-chip active" data-year="all">All Years</button>
       <button class="year-chip" data-year="2024">2024</button>
@@ -285,42 +246,18 @@
       <button class="year-chip" data-year="2021">2021</button>
       <button class="year-chip" data-year="2020">2020</button>
     </div>
-
-    <!-- Ad inside sheet — only shows when AdSense fills it -->
     <div id="adSheet" style="min-height:0;overflow:hidden;transition:min-height .3s">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-9656521698490533"
-           data-ad-slot="auto"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9656521698490533" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
     </div>
-
-    <div class="sheet-papers" id="sheetPapers">
-      <!-- populated by JS -->
-    </div>
+    <div class="sheet-papers" id="sheetPapers"></div>
   </div>
 
-  <!-- ░░ TOAST ░░ -->
   <div class="toast" id="toast"></div>
 
-  <!-- ░░ WHATSAPP CTA ░░ -->
-  <section class="whatsapp-cta">
-    <div class="whatsapp-cta-inner">
-      <div class="whatsapp-icon">💬</div>
-      <div class="whatsapp-text">
-        <h3>Join our WhatsApp Study Group</h3>
-        <p>Get notified when new papers drop. Share tips with Caribbean students.</p>
-      </div>
-      <a href="https://chat.whatsapp.com/YOUR_GROUP_LINK" target="_blank" rel="noopener" class="whatsapp-btn" id="whatsappBtn">Join Free</a>
-    </div>
-  </section>
-
-  <!-- ░░ FOOTER ░░ -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <p class="footer-copy">© 2025 CXC Papers · Free forever for Caribbean students</p>
+      <p class="footer-copy">© 2026 CXC Papers · Free forever for Caribbean students</p>
       <p class="footer-disc">Past papers are used for educational purposes. CXC Past Papers is not affiliated with the Caribbean Examinations Council.</p>
     </div>
   </footer>
@@ -334,7 +271,16 @@
     <button class="share-cancel" id="shareCancel">Cancel</button>
   </div>
 
-  <script src="app.js"></script>
-  <script type="module" src="ai-search.js"></script>
+  <!--
+    PERFORMANCE CHANGES:
+    1. Supabase moved here + deferred (was render-blocking in <head>)
+    2. app.js deferred (was render-blocking)
+    3. ai-search.js REMOVED — now lazy-loaded by app.js on first
+       click of the Study Assistant button. Saves 936ms + 194KB on load.
+    4. Google Fonts moved to preload (non-blocking) above
+  -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="app.js"></script>
+
 </body>
 </html>
