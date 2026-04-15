@@ -12,78 +12,78 @@
   <meta name="google-site-verification" content="03PAiXP0PCKXb_Idsyt1hmY8W7wDAPqEI9c48PrJPb0" />
   <meta name="google-site-verification" content="hYERFr3lTBePdupYCU0UZE68wZQvQS4l-dO_8m3Hgag" />
 
-  <!-- Open Graph -->
   <meta property="og:title" content="CXC Past Papers – Free CSEC & CAPE Past Papers" />
   <meta property="og:description" content="Every CSEC and CAPE past paper, free and fast. Browse by subject, year, and level." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://cxcpastpaper.online/" />
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="CXC Past Papers – Free CSEC &amp; CAPE Past Papers" />
   <meta name="twitter:description" content="Every CSEC and CAPE past paper free. No sign-up. No paywall." />
   <meta name="twitter:url" content="https://cxcpastpaper.online/" />
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-
-  <!-- Preconnect for critical origins only -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-  <!-- Non-render-blocking font load -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" /></noscript>
-
-  <!-- Critical CSS -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Analytics: async, non-blocking -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3XEYK73KY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-P3XEYK73KY');
-  </script>
-
-  <!-- AdSense: async -->
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-P3XEYK73KY');</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9656521698490533" crossorigin="anonymous"></script>
 
-  <!-- SEO: deep link handler -->
   <script>
-    (function() {
-      const pathMatch = window.location.pathname.match(/^\/subject\/(.+)/);
-      const p = new URLSearchParams(window.location.search);
-      const s = pathMatch ? pathMatch[1] : p.get('subject');
-      if (!s) return;
-      const name = s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      const level = p.get('level') || 'CSEC';
-      document.title = `${level} ${name} Past Papers – Free PDF Download | CXC Papers`;
-      const setMeta = (sel, val, attr='content') => { const el=document.querySelector(sel); if(el) el.setAttribute(attr,val); };
-      setMeta('meta[name="description"]', `Free ${level} ${name} past papers and mark schemes PDF download. All years. No sign-up required. Caribbean students — start practising today.`);
-      setMeta('meta[property="og:title"]', `${level} ${name} Past Papers – Free Download`);
-      setMeta('meta[property="og:description"]', `Download free ${level} ${name} past papers. All years, no paywall.`);
-      setMeta('meta[property="og:url"]', window.location.href);
-      setMeta('link[rel="canonical"]', window.location.href, 'href');
-      const sd = document.createElement('script');
-      sd.type = 'application/ld+json';
-      sd.textContent = JSON.stringify({
-        "@context":"https://schema.org","@type":"WebPage",
-        "name":`${level} ${name} Past Papers`,
-        "description":`Free ${level} ${name} past papers for Caribbean students`,
-        "url": window.location.href,
-        "isPartOf":{"@type":"WebSite","url":"https://cxcpastpaper.online"}
-      });
+    (function(){
+      const pathMatch=window.location.pathname.match(/^\/subject\/(.+)/);
+      const p=new URLSearchParams(window.location.search);
+      const s=pathMatch?pathMatch[1]:p.get('subject');
+      if(!s)return;
+      const name=s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+      const level=p.get('level')||'CSEC';
+      document.title=`${level} ${name} Past Papers – Free PDF Download | CXC Papers`;
+      const setMeta=(sel,val,attr='content')=>{const el=document.querySelector(sel);if(el)el.setAttribute(attr,val);};
+      setMeta('meta[name="description"]',`Free ${level} ${name} past papers and mark schemes PDF download. All years. No sign-up required.`);
+      setMeta('meta[property="og:title"]',`${level} ${name} Past Papers – Free Download`);
+      setMeta('meta[property="og:url"]',window.location.href);
+      setMeta('link[rel="canonical"]',window.location.href,'href');
+      const sd=document.createElement('script');sd.type='application/ld+json';
+      sd.textContent=JSON.stringify({"@context":"https://schema.org","@type":"WebPage","name":`${level} ${name} Past Papers`,"description":`Free ${level} ${name} past papers for Caribbean students`,"url":window.location.href,"isPartOf":{"@type":"WebSite","url":"https://cxcpastpaper.online"}});
       document.head.appendChild(sd);
     })();
   </script>
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"CXC Past Papers","url":"https://cxcpastpaper.online","description":"Free CSEC and CAPE past papers for Caribbean students","potentialAction":{"@type":"SearchAction","target":"https://cxcpastpaper.online/?q={search_term_string}","query-input":"required name=search_term_string"}}
-  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"CXC Past Papers","url":"https://cxcpastpaper.online","description":"Free CSEC and CAPE past papers for Caribbean students","potentialAction":{"@type":"SearchAction","target":"https://cxcpastpaper.online/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+
+  <!-- Static content CSS — always visible, layered under dynamic content -->
+  <style>
+    .static-content { background: var(--surface, #f8f9fa); padding: 3rem 1.5rem; }
+    .static-content-inner { max-width: 900px; margin: 0 auto; }
+    .static-content h2 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: #006400; margin-bottom: 0.5rem; }
+    .static-content h3 { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; color: #004d1a; margin: 1.8rem 0 0.6rem; }
+    .static-content p, .static-content li { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; line-height: 1.75; color: #333; }
+    .static-content ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+    .static-content li { margin-bottom: 0.3rem; }
+    .static-subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+    .static-subject-item { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: #222; display: flex; align-items: center; gap: 0.5rem; }
+    .static-subject-item a { color: #006400; text-decoration: none; font-weight: 600; }
+    .static-subject-item a:hover { text-decoration: underline; }
+    .static-tips { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .static-tip { background: #fff; border-left: 4px solid #006400; border-radius: 8px; padding: 1rem 1.2rem; }
+    .static-tip strong { font-family: 'Syne', sans-serif; font-size: 0.9rem; color: #004d1a; display: block; margin-bottom: 0.3rem; }
+    .static-tip p { font-size: 0.85rem; color: #555; margin: 0; }
+    .static-divider { border: none; border-top: 1px solid #e8e8e8; margin: 2rem 0; }
+    body.dark .static-content { background: #111; }
+    body.dark .static-content h2 { color: #ffd700; }
+    body.dark .static-content h3 { color: #ffeb80; }
+    body.dark .static-content p, body.dark .static-content li { color: #ccc; }
+    body.dark .static-subject-item { background: #1a1a1a; border-color: #333; color: #eee; }
+    body.dark .static-subject-item a { color: #ffd700; }
+    body.dark .static-tip { background: #1a1a1a; border-left-color: #ffd700; }
+    body.dark .static-tip strong { color: #ffd700; }
+    body.dark .static-tip p { color: #aaa; }
+    body.dark .static-divider { border-top-color: #2a2a2a; }
+  </style>
 </head>
 <body>
 
@@ -99,7 +99,7 @@
       <nav class="header-nav">
         <a href="#subjects" class="nav-link">Subjects</a>
         <a href="#recent" class="nav-link">Recent</a>
-        <a href="#about" class="nav-link">About</a>
+        <a href="#guide" class="nav-link">Study Guide</a>
         <a href="/contribute.html" class="nav-link" style="color:var(--gold)">+ Contribute</a>
       </nav>
       <button class="dark-toggle" id="darkToggle" title="Toggle dark mode">🌙</button>
@@ -113,7 +113,7 @@
       <div class="hero-badge">🇯🇲 Built for the Caribbean</div>
       <div class="exam-countdown" id="examCountdown"></div>
       <h1 class="hero-title">Every CXC Past Paper.<br><span class="hero-accent">Free. Fast. Forever.</span></h1>
-      <p class="hero-sub">CSEC & CAPE past papers and mark schemes — all in one place. No sign-up. No paywall. Just papers.</p>
+      <p class="hero-sub">CSEC &amp; CAPE past papers and mark schemes — all in one place. No sign-up. No paywall. Just papers.</p>
       <div class="search-wrap">
         <div class="search-box">
           <span class="search-icon">🔍</span>
@@ -129,9 +129,9 @@
       </div>
     </div>
     <div class="stats-bar">
-      <div class="stat"><span class="stat-num" id="statPapers">—</span><span class="stat-label">Papers</span></div>
+      <div class="stat"><span class="stat-num" id="statPapers">200+</span><span class="stat-label">Papers</span></div>
       <div class="stat-divider"></div>
-      <div class="stat"><span class="stat-num" id="statSubjects">—</span><span class="stat-label">Subjects</span></div>
+      <div class="stat"><span class="stat-num" id="statSubjects">25+</span><span class="stat-label">Subjects</span></div>
       <div class="stat-divider"></div>
       <div class="stat"><span class="stat-num" id="statVisitors">—</span><span class="stat-label">Today's Visitors</span></div>
       <div class="stat-divider"></div>
@@ -139,51 +139,13 @@
     </div>
   </section>
 
-  <!-- SEO static content for Googlebot -->
-  <noscript>
-    <section style="padding:2rem;max-width:900px;margin:0 auto;">
-      <h2>Browse CXC Past Papers by Subject</h2>
-      <p>Free CSEC and CAPE past papers for Caribbean students. No sign-up. No paywall.</p>
-      <h3>CSEC Subjects</h3>
-      <ul>
-        <li><a href="/subject/mathematics">CSEC Mathematics Past Papers</a></li>
-        <li><a href="/subject/english-a">CSEC English A Past Papers</a></li>
-        <li><a href="/subject/english-b">CSEC English B Past Papers</a></li>
-        <li><a href="/subject/biology">CSEC Biology Past Papers</a></li>
-        <li><a href="/subject/chemistry">CSEC Chemistry Past Papers</a></li>
-        <li><a href="/subject/physics">CSEC Physics Past Papers</a></li>
-        <li><a href="/subject/principles-of-accounts">CSEC Principles of Accounts Past Papers</a></li>
-        <li><a href="/subject/principles-of-business">CSEC Principles of Business Past Papers</a></li>
-        <li><a href="/subject/caribbean-history">CSEC Caribbean History Past Papers</a></li>
-        <li><a href="/subject/geography">CSEC Geography Past Papers</a></li>
-        <li><a href="/subject/information-technology">CSEC Information Technology Past Papers</a></li>
-        <li><a href="/subject/social-studies">CSEC Social Studies Past Papers</a></li>
-        <li><a href="/subject/human-and-social-biology">CSEC Human and Social Biology Past Papers</a></li>
-        <li><a href="/subject/additional-mathematics">CSEC Additional Mathematics Past Papers</a></li>
-        <li><a href="/subject/integrated-science">CSEC Integrated Science Past Papers</a></li>
-        <li><a href="/subject/agricultural-science">CSEC Agricultural Science Past Papers</a></li>
-        <li><a href="/subject/spanish">CSEC Spanish Past Papers</a></li>
-        <li><a href="/subject/french">CSEC French Past Papers</a></li>
-        <li><a href="/subject/edpm">CSEC EDPM Past Papers</a></li>
-        <li><a href="/subject/office-administration">CSEC Office Administration Past Papers</a></li>
-        <li><a href="/subject/technical-drawing">CSEC Technical Drawing Past Papers</a></li>
-        <li><a href="/subject/physical-education">CSEC Physical Education Past Papers</a></li>
-        <li><a href="/subject/music">CSEC Music Past Papers</a></li>
-        <li><a href="/subject/visual-arts">CSEC Visual Arts Past Papers</a></li>
-      </ul>
-      <h3>CAPE Subjects</h3>
-      <ul>
-        <li><a href="/subject/cape-economics">CAPE Economics Past Papers</a></li>
-      </ul>
-    </section>
-  </noscript>
-
   <!-- Ad Slot 1 -->
   <div id="adTop" style="overflow:hidden;max-height:0;transition:max-height .3s ease;">
     <ins class="adsbygoogle" style="display:block;min-height:0;" data-ad-client="ca-pub-9656521698490533" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle=window.adsbygoogle||[]).push({});setTimeout(function(){var i=document.querySelector('#adTop ins');if(i&&i.getAttribute('data-ad-status')==='filled')document.getElementById('adTop').style.maxHeight='200px';},3000);</script>
   </div>
 
+  <!-- ░░ DYNAMIC SUBJECTS GRID ░░ -->
   <section class="section" id="subjects">
     <div class="section-header">
       <h2 class="section-title">Browse by Subject</h2>
@@ -211,13 +173,116 @@
     <div class="papers-list" id="recentPapers"></div>
   </section>
 
+  <!-- ░░ RICH STATIC CONTENT — always visible to AdSense, Google, and users ░░ -->
+  <div class="static-content" id="guide">
+    <div class="static-content-inner">
+
+      <h2>Free CSEC &amp; CAPE Past Papers for Caribbean Students</h2>
+      <p>CXC Past Papers is the Caribbean's free resource for CSEC and CAPE examination past papers and mark schemes. Whether you're preparing for Mathematics, English A, Biology, Chemistry, Physics, Principles of Accounts, or Caribbean History — we have the papers you need to practise and succeed. All papers are available as PDF downloads with no registration, no subscription, and no paywall.</p>
+
+      <hr class="static-divider" />
+
+      <h3>📚 CSEC Subjects Available</h3>
+      <p>Browse past papers for all major CSEC subjects offered by the Caribbean Examinations Council (CXC). Each subject page includes papers from multiple years along with official mark schemes where available.</p>
+      <div class="static-subject-grid">
+        <div class="static-subject-item"><span>📐</span><a href="/subject/mathematics">Mathematics</a></div>
+        <div class="static-subject-item"><span>✍️</span><a href="/subject/english-a">English A</a></div>
+        <div class="static-subject-item"><span>📖</span><a href="/subject/english-b">English B</a></div>
+        <div class="static-subject-item"><span>🧬</span><a href="/subject/biology">Biology</a></div>
+        <div class="static-subject-item"><span>🧪</span><a href="/subject/chemistry">Chemistry</a></div>
+        <div class="static-subject-item"><span>⚛️</span><a href="/subject/physics">Physics</a></div>
+        <div class="static-subject-item"><span>📊</span><a href="/subject/principles-of-accounts">Principles of Accounts</a></div>
+        <div class="static-subject-item"><span>💼</span><a href="/subject/principles-of-business">Principles of Business</a></div>
+        <div class="static-subject-item"><span>🏛️</span><a href="/subject/caribbean-history">Caribbean History</a></div>
+        <div class="static-subject-item"><span>🌍</span><a href="/subject/geography">Geography</a></div>
+        <div class="static-subject-item"><span>💻</span><a href="/subject/information-technology">Information Technology</a></div>
+        <div class="static-subject-item"><span>🌐</span><a href="/subject/social-studies">Social Studies</a></div>
+        <div class="static-subject-item"><span>🩺</span><a href="/subject/human-and-social-biology">Human &amp; Social Biology</a></div>
+        <div class="static-subject-item"><span>➕</span><a href="/subject/additional-mathematics">Additional Mathematics</a></div>
+        <div class="static-subject-item"><span>🔬</span><a href="/subject/integrated-science">Integrated Science</a></div>
+        <div class="static-subject-item"><span>🌱</span><a href="/subject/agricultural-science">Agricultural Science</a></div>
+        <div class="static-subject-item"><span>🇪🇸</span><a href="/subject/spanish">Spanish</a></div>
+        <div class="static-subject-item"><span>🇫🇷</span><a href="/subject/french">French</a></div>
+        <div class="static-subject-item"><span>🖥️</span><a href="/subject/edpm">EDPM</a></div>
+        <div class="static-subject-item"><span>🗂️</span><a href="/subject/office-administration">Office Administration</a></div>
+        <div class="static-subject-item"><span>📏</span><a href="/subject/technical-drawing">Technical Drawing</a></div>
+        <div class="static-subject-item"><span>🏃</span><a href="/subject/physical-education">Physical Education</a></div>
+        <div class="static-subject-item"><span>🎵</span><a href="/subject/music">Music</a></div>
+        <div class="static-subject-item"><span>🎨</span><a href="/subject/visual-arts">Visual Arts</a></div>
+      </div>
+
+      <hr class="static-divider" />
+
+      <h3>🎯 How to Use Past Papers Effectively</h3>
+      <p>Past papers are the single most effective study tool for CSEC and CAPE examinations. Here is how to get the most out of every paper you practise:</p>
+      <div class="static-tips">
+        <div class="static-tip">
+          <strong>1. Start with the mark scheme</strong>
+          <p>Read the mark scheme before attempting the paper so you understand exactly what examiners are looking for. This teaches you the language and format that earns full marks.</p>
+        </div>
+        <div class="static-tip">
+          <strong>2. Practise under timed conditions</strong>
+          <p>Simulate real exam conditions by setting a timer. CSEC Paper 2 is typically 2 hours 40 minutes. Time management is a skill — practise it early.</p>
+        </div>
+        <div class="static-tip">
+          <strong>3. Do at least 5 years of papers</strong>
+          <p>Examiners repeat topic patterns. Doing 5 or more years of past papers reveals which topics appear every year — focus your revision on those first.</p>
+        </div>
+        <div class="static-tip">
+          <strong>4. Review mistakes immediately</strong>
+          <p>After marking your paper, spend twice as long reviewing wrong answers as you did answering them. Understanding your errors is where real learning happens.</p>
+        </div>
+        <div class="static-tip">
+          <strong>5. Show all working in Maths</strong>
+          <p>In CSEC Mathematics, partial marks are awarded for method. Even if you get the final answer wrong, showing correct working earns you marks. Never skip steps.</p>
+        </div>
+        <div class="static-tip">
+          <strong>6. Learn definitions word-for-word</strong>
+          <p>In Biology, Chemistry, and Physics, definitions must be precise. Examiners use specific key words in the mark scheme — learn them exactly as they appear.</p>
+        </div>
+      </div>
+
+      <hr class="static-divider" />
+
+      <h3>📅 CSEC 2026 Exam Schedule</h3>
+      <p>The CSEC May/June 2026 examinations begin in the first week of May 2026. Caribbean students sitting CSEC this year should aim to complete at least three full past papers per subject before the exam period begins. The examinations are administered by the Caribbean Examinations Council (CXC) and are recognised by universities and employers across the Caribbean region, the United Kingdom, Canada, and the United States.</p>
+
+      <hr class="static-divider" />
+
+      <h3>🌍 About CXC &amp; CSEC</h3>
+      <p>The Caribbean Examinations Council (CXC) is the regional examining body for the Caribbean Community (CARICOM). CXC administers the Caribbean Secondary Education Certificate (CSEC) for students completing secondary school, and the Caribbean Advanced Proficiency Examination (CAPE) for students pursuing pre-university qualifications.</p>
+      <p>CSEC examinations are taken by students in Jamaica, Trinidad and Tobago, Barbados, Guyana, Belize, the Eastern Caribbean States, and other territories. Passes at grades I, II, and III are accepted as entry requirements by universities throughout the Caribbean and internationally. CSEC is equivalent to GCSE O-Level qualifications.</p>
+      <p>CAPE is equivalent to GCE A-Level qualifications and is accepted by universities in the UK, Canada, USA, and the Caribbean as a university entrance qualification. Many Caribbean universities also award credit for CAPE passes, reducing the time required to complete a degree.</p>
+
+      <hr class="static-divider" />
+
+      <h3>❓ Frequently Asked Questions</h3>
+      <ul>
+        <li><strong>Are these past papers free?</strong> Yes — all past papers on CXC Papers are free to download with no registration required.</li>
+        <li><strong>Are mark schemes included?</strong> Yes — where available, official CXC mark schemes are included alongside each paper.</li>
+        <li><strong>How current are the papers?</strong> We add new papers each year after each examination sitting. Papers from 2015 through 2025 are available for most subjects.</li>
+        <li><strong>Can I use this site offline?</strong> Yes — install the site as a PWA (Progressive Web App) by clicking "Install App" to access cached papers without internet.</li>
+        <li><strong>Which territories can use this site?</strong> Any student sitting CXC examinations — Jamaica, Trinidad &amp; Tobago, Barbados, Guyana, Belize, St. Lucia, Grenada, Antigua, and all other CARICOM territories.</li>
+        <li><strong>Is this site affiliated with CXC?</strong> No — CXC Papers is an independent student resource and is not affiliated with the Caribbean Examinations Council.</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- Ad Slot 3 — inside rich content area for better fill rate -->
+  <div style="max-width:900px;margin:0 auto;padding:0 1.5rem 2rem;">
+    <ins class="adsbygoogle" style="display:block;" data-ad-client="ca-pub-9656521698490533" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  </div>
+
+  <!-- About Section -->
   <section class="section about-section" id="about">
     <div class="about-inner">
       <h2 class="section-title">Why CXC Papers?</h2>
       <div class="about-grid">
         <div class="about-card"><span class="about-icon">⚡</span><h3>Instant Access</h3><p>No sign-up. No email. No paywall. Click a subject and get your paper in seconds.</p></div>
         <div class="about-card"><span class="about-icon">📱</span><h3>Works Offline</h3><p>Install as an app and access papers even without internet. Perfect for study sessions anywhere.</p></div>
-        <div class="about-card"><span class="about-icon">🎯</span><h3>Mark Schemes Too</h3><p>Not just the questions — we have mark schemes so you can check your answers and understand the grading.</p></div>
+        <div class="about-card"><span class="about-icon">🎯</span><h3>Mark Schemes Too</h3><p>Not just the questions — we have mark schemes so you can check your answers and understand exactly what examiners want.</p></div>
         <div class="about-card"><span class="about-icon">🌍</span><h3>All Caribbean</h3><p>Built for Jamaica, Trinidad, Barbados, Guyana, and every Caribbean territory sitting CXC exams.</p></div>
       </div>
     </div>
@@ -258,11 +323,10 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <p class="footer-copy">© 2026 CXC Papers · Free forever for Caribbean students</p>
-      <p class="footer-disc">Past papers are used for educational purposes. CXC Past Papers is not affiliated with the Caribbean Examinations Council.</p>
+      <p class="footer-disc">Past papers are used for educational purposes only. CXC Past Papers is not affiliated with the Caribbean Examinations Council (CXC).</p>
     </div>
   </footer>
 
-  <!-- Share Sheet -->
   <div class="share-overlay" id="shareOverlay"></div>
   <div class="share-sheet" id="shareSheet">
     <div class="share-sheet-handle"></div>
@@ -271,16 +335,7 @@
     <button class="share-cancel" id="shareCancel">Cancel</button>
   </div>
 
-  <!--
-    PERFORMANCE CHANGES:
-    1. Supabase moved here + deferred (was render-blocking in <head>)
-    2. app.js deferred (was render-blocking)
-    3. ai-search.js REMOVED — now lazy-loaded by app.js on first
-       click of the Study Assistant button. Saves 936ms + 194KB on load.
-    4. Google Fonts moved to preload (non-blocking) above
-  -->
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="app.js"></script>
-
 </body>
 </html>
