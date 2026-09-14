@@ -5,6 +5,12 @@
 
 import { Brain } from './brain.js';
 
+// Same Supabase project app.js uses — duplicated here because this module is
+// lazy-loaded independently. window.supabase (the library) is already on the
+// page by the time this loads, since it's a top-level <script> in index.html.
+const NEWSLETTER_SUPABASE_URL = 'https://eavcrtoekpmcwdpdeuvg.supabase.co';
+const NEWSLETTER_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdmNydG9la3BtY3dkcGRldXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjIxMzQsImV4cCI6MjA5MDEzODEzNH0.ScLaG4vDgjVN43dFxp88IkJ4ysOmtVyuLNl0ypnzxqk';
+
 // ─── PRACTICE QUESTION BANKS ─────────────────────────────
 const PRACTICE = {
   'mathematics': [
@@ -68,6 +74,41 @@ const PRACTICE = {
     { q: 'Name TWO forms of resistance by enslaved people in the Caribbean.', a: '1. **Marronage** — escaping slavery and forming free communities (e.g. Jamaican Maroons)\n2. **Revolts/Rebellions** — e.g. Sam Sharpe Rebellion (Jamaica, 1831), Bussa\'s Rebellion (Barbados, 1816)' },
     { q: 'Who was Marcus Garvey and what was his significance?', a: '**Marcus Mosiah Garvey** (1887-1940) was a Jamaican political activist who founded the **Universal Negro Improvement Association (UNIA)** and championed Black nationalism and the "Back to Africa" movement.' },
   ],
+  'geography': [
+    { q: 'Define the term "urbanisation".', a: '**Urbanisation** is the increasing proportion of a country\'s population living in towns and cities rather than rural areas, driven by rural-urban migration and natural population growth in urban centres.' },
+    { q: 'State TWO causes of soil erosion.', a: '1. **Deforestation** — removing tree cover exposes soil to wind and rain\n2. **Overgrazing** — livestock strip vegetation, loosening topsoil\n(Also: poor farming practices, heavy rainfall on bare slopes)' },
+    { q: 'What is the difference between weather and climate?', a: '**Weather** is the day-to-day state of the atmosphere in a place (short-term). **Climate** is the average weather pattern of a region over a long period, typically 30+ years.' },
+    { q: 'Explain one way a hurricane can affect a Caribbean economy.', a: 'A hurricane can **destroy crops and infrastructure** (roads, housing, utilities), disrupting agriculture and tourism — major income sources — and requiring costly rebuilding that slows economic growth.' },
+    { q: 'What is a watershed?', a: 'A watershed (drainage basin) is the **area of land drained by a river and its tributaries**, bounded by higher land such as hills or mountains.' },
+  ],
+  'information technology': [
+    { q: 'What is the difference between hardware and software?', a: '**Hardware** is the physical components of a computer (e.g. CPU, keyboard, monitor). **Software** is the programs and instructions that run on it (e.g. operating systems, applications).' },
+    { q: 'Define "algorithm".', a: 'An algorithm is a **step-by-step set of instructions** for solving a problem or completing a task, often expressed as pseudocode or a flowchart before being coded.' },
+    { q: 'What is the purpose of an operating system?', a: 'An operating system **manages computer hardware and software resources**, provides a user interface, and allows applications to run — e.g. Windows, macOS, Linux.' },
+    { q: 'State TWO advantages of a database over a manual filing system.', a: '1. **Faster data retrieval** — records can be searched and sorted instantly\n2. **Reduced duplication** — data stored once and shared across the organisation\n(Also: better security, easier backups)' },
+    { q: 'What is the difference between RAM and ROM?', a: '**RAM** (Random Access Memory) is volatile — data is lost when power is off. **ROM** (Read-Only Memory) is non-volatile — it permanently stores essential startup instructions.' },
+  ],
+  'spanish': [
+    { q: '¿Cómo se dice "I am 16 years old" en español?', a: '**"Tengo dieciséis años."** In Spanish, age is expressed with the verb **tener** (to have), not "ser".' },
+    { q: 'Conjugate "hablar" (to speak) in the present tense for "yo" and "nosotros".', a: '**Yo hablo** (I speak), **Nosotros hablamos** (We speak) — regular "-AR" verbs drop "-ar" and add "-o" / "-amos".' },
+    { q: 'What is the difference between "ser" and "estar" (both mean "to be")?', a: '**Ser** is for permanent characteristics — identity, origin, profession (e.g. "Soy jamaicano"). **Estar** is for temporary states or location (e.g. "Estoy cansado" — I am tired).' },
+    { q: 'Translate: "¿Dónde está la biblioteca?"', a: '**"Where is the library?"** — the question word "dónde" combined with "estar" is used to ask about location.' },
+    { q: 'Give the Spanish word for "homework".', a: '**"La tarea"** (also "los deberes" in some Spanish-speaking countries).' },
+  ],
+  'economics': [
+    { q: 'Define "opportunity cost".', a: 'Opportunity cost is the **value of the next best alternative given up** when a choice is made — e.g. if you study instead of working, the opportunity cost is the wages forgone.' },
+    { q: 'What is the law of demand?', a: 'All else being equal, **as the price of a good rises, quantity demanded falls**, and vice versa — shown by a downward-sloping demand curve.' },
+    { q: 'Distinguish between a movement along and a shift of the demand curve.', a: 'A **movement along** the curve is caused by a change in the **price** of the good itself. A **shift** is caused by a change in a **non-price determinant** (income, tastes, price of related goods, etc.).' },
+    { q: 'What is inflation?', a: 'Inflation is a **sustained increase in the general price level** of goods and services over time, reducing the purchasing power of money.' },
+    { q: 'State TWO functions of money.', a: '1. **Medium of exchange** — used to buy/sell goods and services\n2. **Store of value** — can be saved and used later\n(Also: unit of account, standard of deferred payment)' },
+  ],
+  'communication studies': [
+    { q: 'What is the difference between denotation and connotation?', a: '**Denotation** is the literal, dictionary meaning of a word. **Connotation** is the implied or associated meaning it carries beyond its literal definition.' },
+    { q: 'Identify the THREE main components of the communication process.', a: '1. **Sender** — the source of the message\n2. **Message** — the information communicated\n3. **Receiver** — who decodes and interprets it\n(Often also: feedback, channel, noise)' },
+    { q: 'What is "noise" in communication theory?', a: '**Noise** is anything that distorts a message between sender and receiver — physical (background sound), psychological (bias, distraction), or semantic (unclear wording).' },
+    { q: 'What is code-switching?', a: 'Code-switching is **alternating between two or more languages or language varieties** (e.g. Standard English and Jamaican Creole) depending on context, audience, or purpose.' },
+    { q: 'Give one feature of a formal register in writing.', a: 'A formal register uses **complete sentences, standard grammar, no contractions or slang**, and precise, objective vocabulary — appropriate for official letters, reports, and academic essays.' },
+  ],
 };
 
 // ─── INTENT DETECTION ─────────────────────────────────────
@@ -90,6 +131,7 @@ const KB = {
 function detectIntent(text) {
   const t = text.toLowerCase();
   if (/^(hi|hello|hey|yo|wah gwaan|good morning|good afternoon|good evening)/.test(t)) return 'greeting';
+  if (/\b(mixed|all subjects|multiple subjects|different subjects|random subjects|full mock|mock exam)\b.*\b(quiz|question|practice|test)\b|\b(quiz|question|practice|test)\b.*\b(mixed|all subjects|multiple subjects|different subjects|random subjects)\b/.test(t)) return 'multi_practice';
   if (/\b(practice|quiz|test me|question|drill|exercise)\b/.test(t)) return 'practice';
   if (/\b(explain|what is|what are|how does|describe|define|tell me about)\b/.test(t) && /\b(paper|question|this|it)\b/.test(t) && window.__pdfText) return 'explain_paper';
   if (/\b(find|get|show|need|want|looking for|give me|download|where)\b.*\b(paper|past paper|exam)\b/.test(t) || /\bpast papers?\b/.test(t)) return 'find_papers';
@@ -129,11 +171,26 @@ function extractSubject(text) {
     'principles of business': ['pob','principles of business','business'],
     'integrated science': ['integrated science'],
     'additional mathematics': ['add math','additional math'],
+    'economics': ['economics','econ'],
+    'communication studies': ['communication studies','comm studies'],
   };
   for (const [subject, kws] of Object.entries(map)) {
     if (kws.some(k => t.includes(k))) return subject;
   }
   return null;
+}
+
+// ─── MIXED-SUBJECT QUIZ HELPERS ────────────────────────────
+function parseQuestionCount(text, fallback, max) {
+  const m = text.match(/\b(\d{1,2})\b/);
+  if (!m) return fallback;
+  const n = parseInt(m[1], 10);
+  if (!n || n < 2) return fallback;
+  return Math.min(n, max);
+}
+
+function titleCase(key) {
+  return key.replace(/\b\w/g, c => c.toUpperCase());
 }
 
 // ─── PDF TEXT EXTRACTION ──────────────────────────────────
@@ -275,6 +332,15 @@ const styles = `
   .aip-practice-reveal:hover { background:rgba(255,215,0,.25); }
   .aip-practice-a { display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:.79rem;color:rgba(255,255,255,.78);line-height:1.55; }
   .aip-practice-a.show { display:block; }
+  .aip-practice-subject { font-size:.66rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#ffd700;opacity:.85;margin-bottom:5px; }
+  /* Newsletter gate */
+  .aip-gate-form { display:flex;flex-direction:column;gap:8px;width:100%;max-width:260px;margin-top:6px; }
+  #aiGateEmail { padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none; }
+  #aiGateEmail:focus { border-color:#ffd700; }
+  #aiGateEmail::placeholder { color:rgba(255,255,255,.35); }
+  .aip-gate-msg { font-size:.74rem;min-height:14px; }
+  .aip-gate-msg.err { color:#ff6b6b; }
+  .aip-gate-msg.ok { color:#7cfc93; }
 
   .aip-paper-card { display:flex;align-items:center;gap:8px;margin-top:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 10px;text-decoration:none;transition:all .15s; }
   .aip-paper-card:hover { background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25); }
@@ -313,6 +379,13 @@ const styles = `
 `;
 
 function injectUI() {
+  // app.js injects a lazy-load placeholder button with the same id ("cxcAIBtn").
+  // If we don't remove it, the page ends up with two elements sharing that id —
+  // getElementById() then returns the OLD placeholder, so the click listener
+  // below gets attached to a button that isn't the one visibly on screen, and
+  // the panel never opens. Removing it first guarantees a single, correct match.
+  document.getElementById('cxcAIBtn')?.remove();
+
   const s = document.createElement('style');
   s.textContent = styles;
   document.head.appendChild(s);
@@ -336,6 +409,17 @@ function injectUI() {
         <span>📄</span>
         <span class="aip-pdf-name" id="aiPdfName"></span>
         <button class="aip-pdf-clear" id="aiPdfClear">✕ Remove</button>
+      </div>
+      <div class="aip-load" id="aiGateScreen">
+        <div class="li">📬</div>
+        <h3>Unlock the Study Assistant</h3>
+        <p>Join the CXC Papers list for exam updates, new papers, and study tips — then get instant, free access to the AI Study Assistant.</p>
+        <form class="aip-gate-form" id="aiGateForm">
+          <input type="email" id="aiGateEmail" placeholder="your@email.com" required autocomplete="email" />
+          <button type="submit" class="aip-load-btn" id="aiGateBtn">Unlock Assistant →</button>
+        </form>
+        <p class="aip-gate-msg" id="aiGateMsg"></p>
+        <p class="aip-size">No spam. Unsubscribe anytime.</p>
       </div>
       <div class="aip-load" id="aiLoadScreen">
         <div class="li">📚</div>
@@ -374,6 +458,11 @@ class CXCAssistant {
     this.sendBtn    = document.getElementById('aiSend');
     this.chatWrap   = document.getElementById('aiChatWrap');
     this.loadScreen = document.getElementById('aiLoadScreen');
+    this.gateScreen = document.getElementById('aiGateScreen');
+    this.gateForm   = document.getElementById('aiGateForm');
+    this.gateEmail  = document.getElementById('aiGateEmail');
+    this.gateBtn    = document.getElementById('aiGateBtn');
+    this.gateMsg    = document.getElementById('aiGateMsg');
     this.quickEl    = document.getElementById('aiQuick');
     this.pdfBar     = document.getElementById('aiPdfBar');
     this.pdfName    = document.getElementById('aiPdfName');
@@ -381,12 +470,17 @@ class CXCAssistant {
     this.isOpen = false; this.isReady = false; this.isThinking = false;
     this.Brain = null; this.lastSubject = null; this.practiceIdx = {};
 
-    this.QUICK = ['Find Maths papers 📐','Practice Biology questions 🧬','Explain photosynthesis','How to pass CSEC? 🏆','Upload a paper PDF 📎','Chemistry practice quiz'];
+    this.QUICK = ['Find Maths papers 📐','Mixed subject quiz 🎲','Practice Biology questions 🧬','Explain photosynthesis','How to pass CSEC? 🏆','Upload a paper PDF 📎'];
+
+    this.subscribed = !!localStorage.getItem('cxc_subscriber_email');
+    if (this.subscribed) this.gateScreen.style.display = 'none';
+    else this.loadScreen.style.display = 'none';
 
     this.btn.addEventListener('click', () => this.toggle());
     document.getElementById('aiCloseBtn').addEventListener('click', () => this.close());
     document.getElementById('aiClearBtn').addEventListener('click', () => this.clearChat());
     document.getElementById('aiLoadBtn').addEventListener('click', () => this.activate());
+    this.gateForm.addEventListener('submit', (e) => { e.preventDefault(); this.handleSubscribe(); });
     document.getElementById('aiUploadBtn').addEventListener('click', () => this.fileInput.click());
     document.getElementById('aiPdfClear').addEventListener('click', () => this.clearPDF());
     this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
@@ -404,6 +498,32 @@ class CXCAssistant {
   toggle() { this.isOpen ? this.close() : this.open(); }
   open()  { this.isOpen=true; this.panel.classList.add('open'); this.btn.classList.remove('pulsing'); if(this.isReady) setTimeout(()=>this.inputEl.focus(),260); }
   close() { this.isOpen=false; this.panel.classList.remove('open'); }
+
+  async handleSubscribe() {
+    const email = this.gateEmail.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.gateMsg.textContent = 'Please enter a valid email address.';
+      this.gateMsg.className = 'aip-gate-msg err';
+      return;
+    }
+    this.gateBtn.disabled = true;
+    this.gateBtn.textContent = 'Joining…';
+    this.gateMsg.textContent = '';
+
+    try {
+      const client = window.supabase.createClient(NEWSLETTER_SUPABASE_URL, NEWSLETTER_SUPABASE_KEY);
+      await client.from('newsletter_subscribers').insert({ email, source: 'study_assistant' });
+    } catch (err) {
+      console.error('Newsletter signup failed (continuing anyway):', err);
+    }
+
+    localStorage.setItem('cxc_subscriber_email', email);
+    this.subscribed = true;
+    this.gateScreen.style.display = 'none';
+    this.loadScreen.style.display = '';
+    this.gateBtn.disabled = false;
+    this.gateBtn.textContent = 'Unlock Assistant →';
+  }
 
   async activate() {
     this.loadScreen.style.display = 'none';
@@ -586,6 +706,20 @@ Try a different paper or paste the question text directly in chat.`);
         break;
       }
 
+      case 'multi_practice': {
+        const subjectKeys = Object.keys(PRACTICE);
+        const count = parseQuestionCount(text, Math.min(5, subjectKeys.length), subjectKeys.length);
+        const chosen = [...subjectKeys].sort(() => Math.random() - 0.5).slice(0, count);
+        practiceData = chosen.map(subKey => {
+          const bank = PRACTICE[subKey];
+          const idx = (this.practiceIdx[subKey] || 0) % bank.length;
+          this.practiceIdx[subKey] = idx + 1;
+          return { ...bank[idx], subject: titleCase(subKey) };
+        });
+        replyText = `Here's a **${practiceData.length}-subject mixed quiz** 👇 One question per subject, exam-style. Answer each, then tap to reveal.`;
+        break;
+      }
+
       case 'ask_paper':
       case 'explain_paper':
         if (window.__pdfText) {
@@ -620,7 +754,7 @@ Try a different paper or paste the question text directly in chat.`);
           }
           replyText = papers.length
             ? `Here's what I found related to your question:`
-            : `I can help with:\n• **Finding papers** — "find CSEC Chemistry papers"\n• **Practice questions** — "quiz me on Biology"\n• **Topic explanations** — "explain photosynthesis"\n• **Paper Q&A** — upload a PDF then ask questions\n\nWhat would you like?`;
+            : `I can help with:\n• **Finding papers** — "find CSEC Chemistry papers"\n• **Practice questions** — "quiz me on Biology"\n• **Mixed quiz** — "give me a mixed subject quiz"\n• **Topic explanations** — "explain photosynthesis"\n• **Paper Q&A** — upload a PDF then ask questions\n\nWhat would you like?`;
         }
     }
 
@@ -652,12 +786,14 @@ Try a different paper or paste the question text directly in chat.`);
       </a>`;
     }).join('');
 
-    const practiceCard = practice ? `
+    const practiceList = practice ? (Array.isArray(practice) ? practice : [practice]) : [];
+    const practiceCard = practiceList.map(pr => `
       <div class="aip-practice-card">
-        <div class="aip-practice-q">${esc(practice.q)}</div>
+        ${pr.subject ? `<div class="aip-practice-subject">${esc(pr.subject)}</div>` : ''}
+        <div class="aip-practice-q">${esc(pr.q)}</div>
         <button class="aip-practice-reveal" onclick="this.nextElementSibling.classList.add('show');this.style.display='none'">Show Answer ▾</button>
-        <div class="aip-practice-a">${practice.a.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>
-      </div>` : '';
+        <div class="aip-practice-a">${pr.a.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>
+      </div>`).join('');
 
     div.innerHTML = `<div class="aip-av">${role==='bot'?'🧠':'👤'}</div><div class="aip-bub">${formatted}${cards}${practiceCard}</div>`;
     this.chatEl.appendChild(div);
