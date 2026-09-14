@@ -350,6 +350,7 @@ const styles = `
   .aip-builder-chip input { accent-color:#ffd700; }
   .aip-builder-row { display:flex;align-items:center;gap:8px;font-size:.78rem;color:rgba(255,255,255,.7); }
   .aip-builder-count { width:50px;padding:5px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:.8rem; }
+  .aip-builder-hint { font-size:.68rem;color:rgba(255,255,255,.4);margin-top:-4px; }
   .aip-builder-actions { display:flex;gap:8px; }
   .aip-builder-auto,.aip-builder-generate { flex:1;padding:9px;border-radius:10px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer; }
   .aip-builder-auto { background:rgba(255,215,0,.15);color:#ffd700;border:1px solid rgba(255,215,0,.3); }
@@ -820,9 +821,10 @@ Try a different paper or paste the question text directly in chat.`);
           ${Object.keys(PRACTICE).map(k => `<label class="aip-builder-chip"><input type="checkbox" value="${k}" checked> ${esc(titleCase(k))}</label>`).join('')}
         </div>
         <div class="aip-builder-row">
-          <label>Questions per subject</label>
-          <input type="number" class="aip-builder-count" min="1" max="5" value="1">
+          <label>Total questions</label>
+          <input type="number" class="aip-builder-count" min="1" max="30" value="10">
         </div>
+        <div class="aip-builder-hint">Max 30 — spread evenly across the subjects you pick below.</div>
         <div class="aip-builder-actions">
           <button class="aip-builder-auto" type="button">🎲 Auto-Customize</button>
           <button class="aip-builder-generate" type="button">Generate Test →</button>
@@ -844,34 +846,45 @@ Try a different paper or paste the question text directly in chat.`);
   // ── Custom test builder ─────────────────────────────────
   generateCustomTest(cardEl, auto) {
     const subjectKeys = Object.keys(PRACTICE);
-    let chosenSubjects, perSubject;
+    let chosenSubjects, total;
 
     if (auto) {
       const n = Math.floor(Math.random() * 4) + 3; // 3–6 subjects, auto-picked
       chosenSubjects = [...subjectKeys].sort(() => Math.random() - 0.5).slice(0, n);
-      perSubject = 1;
+      total = chosenSubjects.length; // 1 question each
     } else {
       chosenSubjects = [...cardEl.querySelectorAll('.aip-builder-chip input:checked')].map(i => i.value);
-      const countInput = parseInt(cardEl.querySelector('.aip-builder-count').value, 10);
-      perSubject = Math.max(1, Math.min(5, countInput || 1));
       if (!chosenSubjects.length) {
         this.addMsg('bot', 'Pick at least one subject first! 📚');
         return;
       }
+      const requested = parseInt(cardEl.querySelector('.aip-builder-count').value, 10) || chosenSubjects.length;
+      total = Math.max(1, Math.min(requested, 30)); // this is the actual number the test will have — no silent shrinking
     }
 
+    // Spread the total evenly across chosen subjects, remainder to the first few
+    const base = Math.floor(total / chosenSubjects.length);
+    let remainder = total % chosenSubjects.length;
     const practiceData = [];
     chosenSubjects.forEach(subKey => {
+      let n = base + (remainder > 0 ? 1 : 0);
+      if (remainder > 0) remainder--;
       const bank = PRACTICE[subKey];
-      for (let i = 0; i < perSubject; i++) {
+      for (let i = 0; i < n; i++) {
         const idx = (this.practiceIdx[subKey] || 0) % bank.length;
         this.practiceIdx[subKey] = idx + 1;
         practiceData.push({ ...bank[idx], subject: titleCase(subKey) });
       }
     });
 
+    // Each subject bank has ~5 unique questions, so large requests will start repeating
+    const uniqueAvailable = chosenSubjects.reduce((sum, k) => sum + PRACTICE[k].length, 0);
+    const repeatsNote = total > uniqueAvailable
+      ? ` (note: with only ${chosenSubjects.length} subject${chosenSubjects.length>1?'s':''} picked, some questions repeat past ${uniqueAvailable})`
+      : '';
+
     cardEl.innerHTML = `<div class="aip-builder-done">✅ Test generated below — scroll down!</div>`;
-    this.addMsg('bot', `Here's your **custom ${practiceData.length}-question test** 🎯`, [], practiceData);
+    this.addMsg('bot', `Here's your **custom ${practiceData.length}-question test**${repeatsNote} 🎯`, [], practiceData);
   }
 
   setThinking(on) {
