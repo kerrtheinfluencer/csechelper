@@ -114,6 +114,60 @@ function setupLazyAI() {
       showToast('Could not load assistant. Check connection.');
     });
   });
+
+  setTimeout(() => showLaunchAnnouncement(btn), 1800);
+}
+
+// ─── LAUNCH ANNOUNCEMENT ───────────────────────────────────
+// One-time gamified popup so returning + new visitors notice the
+// assistant is live, and know signing up unlocks the custom test builder.
+function showLaunchAnnouncement(btn) {
+  if (localStorage.getItem('cxc_ai_announced_v1')) return;
+  if (document.getElementById('aiAnnounce')) return;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    #aiAnnounce {
+      position:fixed; bottom:96px; right:24px; z-index:299; max-width:250px;
+      background:linear-gradient(145deg,#0a2e12,#123d1c);
+      border:1px solid rgba(255,215,0,.35); border-radius:16px;
+      padding:16px 16px 14px; box-shadow:0 10px 40px rgba(0,0,0,.5);
+      font-family:'DM Sans',sans-serif; color:#fff;
+      animation: aiAnnounceIn .5s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes aiAnnounceIn { from{opacity:0;transform:translateY(20px) scale(.9)} to{opacity:1;transform:translateY(0) scale(1)} }
+    @keyframes aiAnnounceOut { to{opacity:0;transform:translateY(10px) scale(.95)} }
+    .ai-announce-confetti { font-size:1.4rem; animation:aiConfettiBounce 1.6s ease-in-out infinite; }
+    @keyframes aiConfettiBounce { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-4px) rotate(-4deg)} }
+    .ai-announce-title { font-family:'Syne',sans-serif; font-weight:800; font-size:.92rem; color:#ffd700; margin:4px 0 6px; }
+    .ai-announce-body { font-size:.78rem; line-height:1.5; color:rgba(255,255,255,.85); margin-bottom:10px; }
+    .ai-announce-body strong { color:#ffd700; }
+    .ai-announce-cta { width:100%; padding:9px; border:none; border-radius:10px; background:linear-gradient(135deg,#004d1a,#008c2e); color:#ffd700; font-family:'Syne',sans-serif; font-weight:700; font-size:.8rem; cursor:pointer; }
+    .ai-announce-close { position:absolute; top:8px; right:10px; background:none; border:none; color:rgba(255,255,255,.5); font-size:.85rem; cursor:pointer; line-height:1; }
+    @media (max-width:420px) { #aiAnnounce { right:14px; left:14px; max-width:none; bottom:90px; } }
+  `;
+  document.head.appendChild(style);
+
+  const wrap = document.createElement('div');
+  wrap.id = 'aiAnnounce';
+  wrap.innerHTML = `
+    <button class="ai-announce-close" aria-label="Dismiss">✕</button>
+    <div class="ai-announce-confetti">🎉✨🎊</div>
+    <div class="ai-announce-title">Study Assistant is LIVE!</div>
+    <div class="ai-announce-body">Free to try. Sign up to unlock <strong>custom practice tests</strong> — pick your own subjects &amp; question count.</div>
+    <button class="ai-announce-cta">Try it now →</button>
+  `;
+  document.body.appendChild(wrap);
+
+  const dismiss = () => {
+    wrap.style.animation = 'aiAnnounceOut .25s ease forwards';
+    setTimeout(() => wrap.remove(), 250);
+    localStorage.setItem('cxc_ai_announced_v1', '1');
+  };
+  wrap.querySelector('.ai-announce-close').addEventListener('click', dismiss);
+  wrap.querySelector('.ai-announce-cta').addEventListener('click', () => { dismiss(); btn.click(); });
+
+  setTimeout(() => { if (document.body.contains(wrap)) dismiss(); }, 12000);
 }
 
 // ─── SERVICE WORKER ───────────────────────────────────────

@@ -131,6 +131,7 @@ const KB = {
 function detectIntent(text) {
   const t = text.toLowerCase();
   if (/^(hi|hello|hey|yo|wah gwaan|good morning|good afternoon|good evening)/.test(t)) return 'greeting';
+  if (/\bcustom (test|quiz)\b|\bbuild (my|a|your) own (test|quiz)\b|\b(choose|pick|select) (my|the) (topics|subjects)\b|\bmake my own (test|quiz)\b/.test(t)) return 'custom_test_builder';
   if (/\b(mixed|all subjects|multiple subjects|different subjects|random subjects|full mock|mock exam)\b.*\b(quiz|question|practice|test)\b|\b(quiz|question|practice|test)\b.*\b(mixed|all subjects|multiple subjects|different subjects|random subjects)\b/.test(t)) return 'multi_practice';
   if (/\b(practice|quiz|test me|question|drill|exercise)\b/.test(t)) return 'practice';
   if (/\b(explain|what is|what are|how does|describe|define|tell me about)\b/.test(t) && /\b(paper|question|this|it)\b/.test(t) && window.__pdfText) return 'explain_paper';
@@ -341,6 +342,19 @@ const styles = `
   .aip-gate-msg { font-size:.74rem;min-height:14px; }
   .aip-gate-msg.err { color:#ff6b6b; }
   .aip-gate-msg.ok { color:#7cfc93; }
+  /* Custom test builder */
+  .aip-builder-card { background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;margin-top:8px;display:flex;flex-direction:column;gap:10px; }
+  .aip-builder-title { font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:#ffd700; }
+  .aip-builder-subjects { display:flex;flex-wrap:wrap;gap:6px; }
+  .aip-builder-chip { display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:5px 10px;font-size:.72rem;color:#fff;cursor:pointer; }
+  .aip-builder-chip input { accent-color:#ffd700; }
+  .aip-builder-row { display:flex;align-items:center;gap:8px;font-size:.78rem;color:rgba(255,255,255,.7); }
+  .aip-builder-count { width:50px;padding:5px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:.8rem; }
+  .aip-builder-actions { display:flex;gap:8px; }
+  .aip-builder-auto,.aip-builder-generate { flex:1;padding:9px;border-radius:10px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer; }
+  .aip-builder-auto { background:rgba(255,215,0,.15);color:#ffd700;border:1px solid rgba(255,215,0,.3); }
+  .aip-builder-generate { background:linear-gradient(135deg,#004d1a,#008c2e);color:#ffd700; }
+  .aip-builder-done { font-size:.78rem;color:#7cfc93;padding:4px 0; }
 
   .aip-paper-card { display:flex;align-items:center;gap:8px;margin-top:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 10px;text-decoration:none;transition:all .15s; }
   .aip-paper-card:hover { background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25); }
@@ -470,7 +484,7 @@ class CXCAssistant {
     this.isOpen = false; this.isReady = false; this.isThinking = false;
     this.Brain = null; this.lastSubject = null; this.practiceIdx = {};
 
-    this.QUICK = ['Find Maths papers 📐','Mixed subject quiz 🎲','Practice Biology questions 🧬','Explain photosynthesis','How to pass CSEC? 🏆','Upload a paper PDF 📎'];
+    this.QUICK = ['Find Maths papers 📐','🎛 Build custom test','Mixed subject quiz 🎲','Practice Biology questions 🧬','Explain photosynthesis','Upload a paper PDF 📎'];
 
     this.subscribed = !!localStorage.getItem('cxc_subscriber_email');
     if (this.subscribed) this.gateScreen.style.display = 'none';
@@ -706,6 +720,10 @@ Try a different paper or paste the question text directly in chat.`);
         break;
       }
 
+      case 'custom_test_builder':
+        replyText = `Let's build your custom test! ✏️ Pick your subjects and how many questions per subject below — or tap **Auto-Customize** and I'll put together a balanced mix for you.`;
+        break;
+
       case 'multi_practice': {
         const subjectKeys = Object.keys(PRACTICE);
         const count = parseQuestionCount(text, Math.min(5, subjectKeys.length), subjectKeys.length);
@@ -759,13 +777,13 @@ Try a different paper or paste the question text directly in chat.`);
     }
 
     this.removeTyping();
-    this.addMsg('bot', replyText, papers, practiceData);
+    this.addMsg('bot', replyText, papers, practiceData, intent === 'custom_test_builder');
     this.setThinking(false);
     this.renderQuick();
   }
 
   // ── Render message ─────────────────────────────────────
-  addMsg(role, text, papers=[], practice=null) {
+  addMsg(role, text, papers=[], practice=null, builder=false) {
     const div = document.createElement('div');
     div.className = `aip-msg ${role}`;
     const formatted = text
@@ -795,9 +813,65 @@ Try a different paper or paste the question text directly in chat.`);
         <div class="aip-practice-a">${pr.a.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>
       </div>`).join('');
 
-    div.innerHTML = `<div class="aip-av">${role==='bot'?'🧠':'👤'}</div><div class="aip-bub">${formatted}${cards}${practiceCard}</div>`;
+    const builderCard = builder ? `
+      <div class="aip-builder-card">
+        <div class="aip-builder-title">🎛 Build Your Test</div>
+        <div class="aip-builder-subjects">
+          ${Object.keys(PRACTICE).map(k => `<label class="aip-builder-chip"><input type="checkbox" value="${k}" checked> ${esc(titleCase(k))}</label>`).join('')}
+        </div>
+        <div class="aip-builder-row">
+          <label>Questions per subject</label>
+          <input type="number" class="aip-builder-count" min="1" max="5" value="1">
+        </div>
+        <div class="aip-builder-actions">
+          <button class="aip-builder-auto" type="button">🎲 Auto-Customize</button>
+          <button class="aip-builder-generate" type="button">Generate Test →</button>
+        </div>
+      </div>` : '';
+
+    div.innerHTML = `<div class="aip-av">${role==='bot'?'🧠':'👤'}</div><div class="aip-bub">${formatted}${cards}${practiceCard}${builderCard}</div>`;
     this.chatEl.appendChild(div);
+
+    if (builder) {
+      const card = div.querySelector('.aip-builder-card');
+      card.querySelector('.aip-builder-auto').addEventListener('click', () => this.generateCustomTest(card, true));
+      card.querySelector('.aip-builder-generate').addEventListener('click', () => this.generateCustomTest(card, false));
+    }
+
     this.scrollBottom();
+  }
+
+  // ── Custom test builder ─────────────────────────────────
+  generateCustomTest(cardEl, auto) {
+    const subjectKeys = Object.keys(PRACTICE);
+    let chosenSubjects, perSubject;
+
+    if (auto) {
+      const n = Math.floor(Math.random() * 4) + 3; // 3–6 subjects, auto-picked
+      chosenSubjects = [...subjectKeys].sort(() => Math.random() - 0.5).slice(0, n);
+      perSubject = 1;
+    } else {
+      chosenSubjects = [...cardEl.querySelectorAll('.aip-builder-chip input:checked')].map(i => i.value);
+      const countInput = parseInt(cardEl.querySelector('.aip-builder-count').value, 10);
+      perSubject = Math.max(1, Math.min(5, countInput || 1));
+      if (!chosenSubjects.length) {
+        this.addMsg('bot', 'Pick at least one subject first! 📚');
+        return;
+      }
+    }
+
+    const practiceData = [];
+    chosenSubjects.forEach(subKey => {
+      const bank = PRACTICE[subKey];
+      for (let i = 0; i < perSubject; i++) {
+        const idx = (this.practiceIdx[subKey] || 0) % bank.length;
+        this.practiceIdx[subKey] = idx + 1;
+        practiceData.push({ ...bank[idx], subject: titleCase(subKey) });
+      }
+    });
+
+    cardEl.innerHTML = `<div class="aip-builder-done">✅ Test generated below — scroll down!</div>`;
+    this.addMsg('bot', `Here's your **custom ${practiceData.length}-question test** 🎯`, [], practiceData);
   }
 
   setThinking(on) {
